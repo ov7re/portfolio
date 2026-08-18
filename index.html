@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ov7 — Développement</title>
+  <meta name="description"
+    content="Ov7 — développeur FiveM et full-stack. Scripts sur mesure, bots Discord, applications desktop.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <nav class="wrap">
+      <a href="#top" class="logo">OV7<span class="dot">_</span></a>
+      <div class="nav-links" id="navLinks">
+        <a href="#about">À propos</a>
+        <a href="#skills">Compétences</a>
+        <a href="#projects">Projets</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="hero wrap">
+      <p class="eyebrow">Description de mes compétences</p>
+      <div class="terminal" id="terminal"></div>
+      <h1>Des scripts qui <span class="accent">tiennent</span> en prod, pas juste en démo.</h1>
+      <p class="lede">Développeur FiveM &amp; Full-Stack. Je conçois des ressources, bases complètes, des bots Discord
+        et des
+        outils desktop pensés pour durer — pas pour planter au premier restart.</p>
+      <div class="cta-row">
+        <a href="#projects" class="btn btn-primary">Voir mes projets →</a>
+        <a href="#contact" class="btn btn-ghost">Me contacter</a>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="wrap about-grid">
+        <div>
+          <p class="label">// À propos</p>
+          <h2>Un développeur qui vient du monde FiveM.</h2>
+          <div class="about-text">
+            <p><strong>Ov7</strong> — je développe des ressources pour serveurs FiveM (boutiques, systèmes de rôle,
+              interfaces NUI) ainsi que des bots Discord et des applications desktop divers et variés.</p>
+            <p>Mon approche : du code propre, lisible et optimisé pour supporter la charge d'un serveur plein. Je
+              privilégie la stabilité et l'expérience utilisateur en production plutôt que la facilité d'une simple
+              démo.
+            </p>
+          </div>
+        </div>
+        <div class="sysinfo">
+          <dl>
+            <dt>rôle :</dt>
+            <dd>Développeur FiveM &amp; Full-Stack</dd>
+            <dt>stack :</dt>
+            <dd>Lua · JS/Node · React · Electron</dd>
+            <dt>focus :</dt>
+            <dd>ESX / oxmysql / NUI</dd>
+            <dt>statut :</dt>
+            <dd>Toujours disponible</dd>
+            <dt>basé :</dt>
+            <dd>France</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="wrap">
+        <p class="label">// Compétences</p>
+        <h2>Ce que je manie au quotidien.</h2>
+        <div class="skill-groups">
+          <div class="skill-group">
+            <h3>Scripting FiveM</h3>
+            <div class="tag-list">
+              <span class="tag">Lua</span>
+              <span class="tag">ESX</span>
+              <span class="tag">oxmysql</span>
+              <span class="tag">NUI</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h3>Bots &amp; automatisation</h3>
+            <div class="tag-list">
+              <span class="tag">Discord.js</span>
+              <span class="tag">Node.js</span>
+              <span class="tag">CommonJS</span>
+              <span class="tag">WebSockets</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h3>Interfaces &amp; desktop</h3>
+            <div class="tag-list">
+              <span class="tag">React</span>
+              <span class="tag">Electron</span>
+              <span class="tag">HTML/CSS/JS</span>
+              <span class="tag">Express</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="wrap">
+        <p class="label">// Projets</p>
+        <h2>Une sélection de ce que j'ai livré.</h2>
+        <div class="project-grid">
+          <div class="project-card">
+            <div class="file-badge">.lua</div>
+            <h3>Ov7_Boutique</h3>
+            <p>Ressource de boutique premium pour serveur FiveM, avec système VIP et état persistant.</p>
+            <div class="project-tags"><span>Lua</span><span>ESX</span><span>oxmysql</span><span>NUI</span></div>
+            <a href="#contact" class="project-link">Voir le projet →</a>
+          </div>
+          <div class="project-card">
+            <div class="file-badge">.js</div>
+            <h3>ov_secure</h3>
+            <p>Bot Discord anti-raid avec une trentaine de modules de protection.</p>
+            <div class="project-tags"><span>Discord.js</span><span>Node.js</span></div>
+            <a href="#contact" class="project-link">Voir le projet →</a>
+          </div>
+          <div class="project-card">
+            <div class="file-badge">.js</div>
+            <h3>over_bot</h3>
+            <p>Bot Discord généraliste, architecture modulaire à base de loader.</p>
+            <div class="project-tags"><span>Discord.js</span><span>Node.js</span></div>
+            <a href="#contact" class="project-link">Voir le projet →</a>
+          </div>
+          <div class="project-card">
+            <div class="file-badge">.tsx</div>
+            <h3>VaultDesk</h3>
+            <p>Application desktop avec authentification, explorateur de fichiers et module d'administration.</p>
+            <div class="project-tags"><span>Electron</span><span>React</span></div>
+            <a href="#contact" class="project-link">Voir le projet →</a>
+          </div>
+          <div class="project-card">
+            <div class="file-badge">.html/css/js</div>
+            <h3>Owo-Search</h3>
+            <p>Logiciel de recherche en tout types de base de donnée, informations indexées et consultables.</p>
+            <div class="project-tags"><span>HTML/CSS/JS</span></div>
+            <a href="#contact" class="project-link">Voir le projet →</a>
+          </div>
+          <div class="project-card">
+            <div class="file-badge">.jsx</div>
+            <h3>Projet scolaire</h3>
+            <p>Site web avec carte intéractive de la Sicile dans le cardre d'un projet scolaire en partenariat avec
+              Erasmus +</p>
+            <div class="project-tags"><span>React</span></div>
+            <a href="#contact" class="project-link">Voir le projet →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="wrap contact-grid">
+        <div class="contact-note">
+          <p class="label">// Contact</p>
+          <h2>Un projet en tête ?</h2>
+          <p>Décris-moi ton besoin — serveur FiveM, bot Discord ou outil sur mesure — et je reviens vers toi rapidement.
+          </p>
+          <div class="contact-links">
+            <a href="#" onclick="copyText('user.ov7','Discord copié !'); return false;">Discord — user.ov7</a>
+            <a href="mailto:arthur.calvet@hotmail.com">Email — arthur.calvet@hotmail.com</a>
+          </div>
+        </div>
+        <form id="contactForm" action="https://formsubmit.co/arthur.calvet@hotmail.com" method="POST">
+
+          <!-- Config FormSubmit -->
+          <input type="hidden" name="_subject" value="Nouveau message depuis le portfolio">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="https://ov7.fr/merci.html">
+          <input type="hidden" name="_template" value="table">
+          <!-- Champ anti-spam -->
+          <input type="text" name="_honey" style="display:none">
+
+          <div class="form-group">
+            <label for="name">Nom / Pseudo</label>
+            <input id="name" name="name" type="text" placeholder="Ex: Jean Dupont" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="votre@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Décris ton projet..." required></textarea>
+          </div>
+          <button type="submit">Envoyer →</button>
+          <p class="form-status" id="formStatus"></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="wrap">
+    <span>© 2026 Ov7. Tous droits réservés.</span>
+    <span>Conçu &amp; codé par Ov7</span>
+  </footer>
+
+  <div class="toast" id="toast"><span id="toastMsg"></span></div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

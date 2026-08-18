@@ -14,15 +14,6 @@ navLinks.querySelectorAll('a').forEach(a => {
   });
 });
 
-// ── Terminal typing effect ────────────────────────────────────────────────────
-const terminalEl = document.getElementById('terminal');
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const line = {
-  prompt: 'ov7@portfolio:~$ ',
-  cmd: 'whoami',
-  out: 'Développeur FiveM & Full-Stack'
-};
-
 if (reduced) {
   terminalEl.innerHTML = `<span class="prompt">${line.prompt}</span>${line.cmd}<br><span class="out">${line.out}</span>`;
 } else {

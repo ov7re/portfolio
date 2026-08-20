@@ -2,19 +2,19 @@
 
 /* Editable content for the À Propos timeline. Coordinates use the SVG viewBox. */
 const ABOUT_TIMELINE = {
-  fr:[
-    {x:92, y:173, title:'2020 — Début du projet', text:'Premières expérimentations autour des outils web et de l’automatisation.'},
-    {x:190, y:157, title:'2021 — Premiers produits', text:'Conception d’interfaces desktop pensées pour rester rapides et lisibles.'},
-    {x:287, y:105, title:'2022 — Full-stack', text:'Montée en puissance côté React, Node.js, API et bases de données.'},
-    {x:393, y:164, title:'2023 — Sécurité', text:'Exploration des systèmes, de la confidentialité et des réseaux.'},
-    {x:489, y:116, title:'Aujourd’hui — Construire', text:'Des expériences robustes, utiles et un peu hors du cadre.'}
+  fr: [
+    {x:92, y:173, title:'2022 — Début du projet', text:'Premières expérimentations autour des outils web, fonctionnement de discord et de l’automatisation avec découverte des services fivem ainsi que la logique discord.'},
+    {x:190, y:157, title:'2023 — Premiers produits', text:'Conception d’interfaces desktop et web pensées pour rester rapides et lisibles, en parallèle développement des mes compétences en scripting et organisation LUA.'},
+    {x:287, y:105, title:'2024 — Full-stack', text:'A ce moment donné, j’ai décider d’élargir mes compétences et de devenir full stack, je suis passer au REACT, Node.js, API et base de données.'},
+    {x:393, y:164, title:'2025 — Sécurité', text:'Exploration des systèmes informatiques plus comlexe, exploration des réseaux et exploration de l’attauqe / défense.'},
+    {x:489, y:116, title:'Aujourd’hui — Construire', text:'Après avoir accumulé un peu d’expériences, je rélise maintenant des projets de plus grosse envergure en full stack.'}
   ],
-  en:[
-    {x:92, y:173, title:'2020 — Getting started', text:'First experiments with web tooling and automation.'},
-    {x:190, y:157, title:'2021 — First products', text:'Designing desktop interfaces meant to stay fast and legible.'},
-    {x:287, y:105, title:'2022 — Full-stack', text:'Ramping up on React, Node.js, APIs and databases.'},
-    {x:393, y:164, title:'2023 — Security', text:'Exploring systems, privacy and networking.'},
-    {x:489, y:116, title:'Today — Building', text:'Robust, useful experiences, a little off the beaten path.'}
+  en: [
+    {x:92, y:173, title:'2022 — Project start', text:'First experiments with web tools, Discord, and automation, along with discovering FiveM services and Discord logic.'},
+    {x:190, y:157, title:'2023 — First products', text:'Designing desktop and web interfaces focused on staying fast and readable, while developing my scripting and Lua programming skills.'},
+    {x:287, y:105, title:'2024 — Full-stack', text:'At this point, I decided to expand my skills and become a full-stack developer, moving into React, Node.js, APIs, and databases.'},
+    {x:393, y:164, title:'2025 — Security', text:'Exploring more complex computer systems, networking, and the fundamentals of offensive and defensive security.'},
+    {x:489, y:116, title:'Today — Building', text:'After gaining some experience, I am now working on larger-scale full-stack projects.'}
   ]
 };
 

@@ -1,226 +1,367 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ov7 — Développement</title>
-  <meta name="description"
-    content="Ov7 — développeur FiveM et full-stack. Scripts sur mesure, bots Discord, applications desktop.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7OS — Portfolio · Live Settings</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+<div id="app">
 
-  <header>
-    <nav class="wrap">
-      <a href="#top" class="logo">OV7<span class="dot">_</span></a>
-      <div class="nav-links" id="navLinks">
-        <a href="#about">À propos</a>
-        <a href="#skills">Compétences</a>
-        <a href="#projects">Projets</a>
-        <a href="#contact">Contact</a>
+  <!-- ============ BOOT ============ -->
+  <div id="boot">
+    <div class="flame-wrap" id="flameWrap">
+      <svg viewBox="0 0 200 240">
+        <defs>
+          <linearGradient id="flameGradOuter" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="#5c0a14"/>
+            <stop offset="45%" stop-color="var(--accent-color)"/>
+            <stop offset="100%" stop-color="var(--accent-strong)"/>
+          </linearGradient>
+          <linearGradient id="flameGradInner" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="#b3121f"/>
+            <stop offset="50%" stop-color="var(--accent-strong)"/>
+            <stop offset="100%" stop-color="var(--accent-glow)"/>
+          </linearGradient>
+          <radialGradient id="coreGlowGrad" cx="50%" cy="60%" r="55%">
+            <stop offset="0%" stop-color="var(--accent-glow)" stop-opacity=".85"/>
+            <stop offset="100%" stop-color="var(--accent-glow)" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="baseGlowGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="var(--accent-color)" stop-opacity=".45"/>
+            <stop offset="100%" stop-color="var(--accent-color)" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="softBlur" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="7"/>
+          </filter>
+          <filter id="emberBlur" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="1"/>
+          </filter>
+          <filter id="smokeBlur" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="2.4"/>
+          </filter>
+          <radialGradient id="cometHeadGrad" cx="45%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#fff5e6"/>
+            <stop offset="35%" stop-color="var(--accent-glow)"/>
+            <stop offset="100%" stop-color="var(--accent-strong)" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="cometTrailGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="var(--accent-strong)" stop-opacity="0"/>
+            <stop offset="100%" stop-color="var(--accent-glow)" stop-opacity=".85"/>
+          </linearGradient>
+        </defs>
+
+        <!-- traveling comet: darts across the screen, then settles at center and forms the logo -->
+        <g id="flameComet">
+          <ellipse id="cometTrail" cx="100" cy="120" rx="72" ry="15" fill="url(#cometTrailGrad)" filter="url(#softBlur)" transform="rotate(-24 100 120)"/>
+          <circle id="cometHead" cx="100" cy="120" r="17" fill="url(#cometHeadGrad)" filter="url(#softBlur)"/>
+          <circle id="cometHeadCore" cx="100" cy="120" r="6" fill="#fff8ec"/>
+        </g>
+
+        <!-- ground glow pool -->
+        <ellipse id="groundGlow" cx="100" cy="204" rx="82" ry="17" fill="url(#baseGlowGrad)"/>
+
+        <!-- soft blurred bloom behind the whole flame -->
+        <path id="flameBloom" filter="url(#softBlur)" fill="url(#flameGradOuter)" d="M100,14 C114,34 108,50 120,64 C140,82 156,102 150,134 C146,158 134,172 124,188 C118,196 108,202 100,200 C92,202 82,196 76,188 C66,172 54,158 50,134 C44,102 60,82 80,64 C92,50 86,34 100,14 Z"/>
+
+        <!-- outer stroke (draw-on) -->
+        <path id="flamePath" d="M100,14 C114,34 108,50 120,64 C140,82 156,102 150,134 C146,158 134,172 124,188 C118,196 108,202 100,200 C92,202 82,196 76,188 C66,172 54,158 50,134 C44,102 60,82 80,64 C92,50 86,34 100,14 Z"/>
+        <!-- inner stroke (draw-on) -->
+        <path id="flameInnerPath" d="M100,58 C110,72 106,82 114,92 C126,104 134,118 130,138 C128,152 120,162 114,172 C110,178 104,182 100,180 C96,182 90,178 86,172 C80,162 72,152 70,138 C66,118 74,104 86,92 C94,82 90,72 100,58 Z"/>
+        <!-- glossy rim highlight, left edge -->
+        <path id="flameHighlight" d="M100,14 C86,34 92,50 80,64 C60,82 44,102 50,134 C54,158 66,172 76,188"/>
+
+        <!-- live flame group: fills + core, sways gently once ignited -->
+        <g id="flameLive">
+          <!-- outer tongue -->
+          <path id="flameFill" fill-rule="evenodd" d="M100,14 C114,34 108,50 120,64 C140,82 156,102 150,134 C146,158 134,172 124,188 C118,196 108,202 100,200 C92,202 82,196 76,188 C66,172 54,158 50,134 C44,102 60,82 80,64 C92,50 86,34 100,14 Z"/>
+          <!-- inner tongue (flicker) -->
+          <path id="flameFillInner" fill-rule="evenodd" d="M100,58 C110,72 106,82 114,92 C126,104 134,118 130,138 C128,152 120,162 114,172 C110,178 104,182 100,180 C96,182 90,178 86,172 C80,162 72,152 70,138 C66,118 74,104 86,92 C94,82 90,72 100,58 Z"/>
+          <!-- inner core glow -->
+          <ellipse id="flameCore" cx="100" cy="142" rx="21" ry="28" fill="url(#coreGlowGrad)"/>
+        </g>
+
+        <!-- embers -->
+        <g class="embers" filter="url(#emberBlur)">
+          <circle cx="80" cy="58" r="2.8" style="--drift:8px; animation-duration:2.3s; animation-delay:.15s"/>
+          <circle cx="118" cy="48" r="2.2" style="--drift:-10px; animation-duration:2.7s; animation-delay:.75s"/>
+          <circle cx="96" cy="38" r="1.8" style="--drift:5px; animation-duration:2.1s; animation-delay:1.4s"/>
+          <circle cx="130" cy="68" r="2.4" style="--drift:-6px; animation-duration:2.9s; animation-delay:.95s"/>
+          <circle cx="70" cy="78" r="1.8" style="--drift:10px; animation-duration:2.4s; animation-delay:1.8s"/>
+          <circle cx="106" cy="30" r="1.4" style="--drift:-8px; animation-duration:2.6s; animation-delay:2.2s"/>
+          <circle cx="88" cy="90" r="2.2" style="--drift:4px; animation-duration:2.2s; animation-delay:.4s"/>
+          <circle cx="140" cy="96" r="1.6" style="--drift:-5px; animation-duration:2.8s; animation-delay:1.6s"/>
+          <circle cx="62" cy="104" r="1.4" style="--drift:7px; animation-duration:2.5s; animation-delay:2.5s"/>
+        </g>
+
+        <!-- rising smoke wisps -->
+        <g class="smoke" filter="url(#smokeBlur)">
+          <path class="w1" d="M90,22 C86,6 98,-6 94,-22" style="animation-duration:4.2s; animation-delay:3.4s"/>
+          <path class="w2" d="M110,26 C114,10 104,0 108,-16" style="animation-duration:4.6s; animation-delay:3.9s"/>
+          <path class="w3" d="M100,16 C98,0 106,-8 102,-24" style="animation-duration:5s; animation-delay:4.3s"/>
+        </g>
+
+        <!-- shockwave ring on ignition flash -->
+        <circle class="shockwave" cx="100" cy="150" r="70"/>
+      </svg>
+    </div>
+    <div class="boot-label"><span data-i18n="bootLabel">Démarrage de</span> <b>7OS</b></div>
+    <div class="progress-row">
+      <div class="progress"><i></i></div>
+      <div class="progress-pct" id="bootPct">0%</div>
+    </div>
+  </div>
+
+  <!-- ============ DESKTOP ============ -->
+  <div id="desktop">
+    <div class="grain"></div>
+
+    <div class="icons">
+      <div class="icon" data-win="projets">
+        <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="1.6"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg></div>
+        <span data-i18n="projects">Mes Projets</span>
       </div>
-      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </nav>
-  </header>
-
-  <main id="top">
-
-    <!-- HERO -->
-    <section class="hero wrap">
-      <p class="eyebrow">Description de mes compétences</p>
-      <div class="terminal" id="terminal"></div>
-      <h1>Des scripts qui <span class="accent">tiennent</span> en prod, pas juste en démo.</h1>
-      <p class="lede">Développeur FiveM &amp; Full-Stack. Je conçois des ressources, bases complètes, des bots Discord
-        et des
-        outils desktop pensés pour durer — pas pour planter au premier restart.</p>
-      <div class="cta-row">
-        <a href="#projects" class="btn btn-primary">Voir mes projets →</a>
-        <a href="#contact" class="btn btn-ghost">Me contacter</a>
+      <div class="icon" data-win="apropos">
+        <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4.5 5-6 8-6s6.5 1.5 8 6"/></svg></div>
+        <span data-i18n="about">À Propos</span>
       </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about">
-      <div class="wrap about-grid">
-        <div>
-          <p class="label">// À propos</p>
-          <h2>Un développeur qui vient du monde FiveM.</h2>
-          <div class="about-text">
-            <p><strong>Ov7</strong> — je développe des ressources pour serveurs FiveM (boutiques, systèmes de rôle,
-              interfaces NUI) ainsi que des bots Discord et des applications desktop divers et variés.</p>
-            <p>Mon approche : du code propre, lisible et optimisé pour supporter la charge d'un serveur plein. Je
-              privilégie la stabilité et l'expérience utilisateur en production plutôt que la facilité d'une simple
-              démo.
-            </p>
-          </div>
-        </div>
-        <div class="sysinfo">
-          <dl>
-            <dt>rôle :</dt>
-            <dd>Développeur FiveM &amp; Full-Stack</dd>
-            <dt>stack :</dt>
-            <dd>Lua · JS/Node · React · Electron</dd>
-            <dt>focus :</dt>
-            <dd>ESX / oxmysql / NUI</dd>
-            <dt>statut :</dt>
-            <dd>Toujours disponible</dd>
-            <dt>basé :</dt>
-            <dd>France</dd>
-          </dl>
-        </div>
+      <div class="icon" data-win="competences">
+        <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="1"/></svg></div>
+        <span data-i18n="skills">Compétences</span>
       </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section id="skills">
-      <div class="wrap">
-        <p class="label">// Compétences</p>
-        <h2>Ce que je manie au quotidien.</h2>
-        <div class="skill-groups">
-          <div class="skill-group">
-            <h3>Scripting FiveM</h3>
-            <div class="tag-list">
-              <span class="tag">Lua</span>
-              <span class="tag">ESX</span>
-              <span class="tag">oxmysql</span>
-              <span class="tag">NUI</span>
-            </div>
-          </div>
-          <div class="skill-group">
-            <h3>Bots &amp; automatisation</h3>
-            <div class="tag-list">
-              <span class="tag">Discord.js</span>
-              <span class="tag">Node.js</span>
-              <span class="tag">CommonJS</span>
-              <span class="tag">WebSockets</span>
-            </div>
-          </div>
-          <div class="skill-group">
-            <h3>Interfaces &amp; desktop</h3>
-            <div class="tag-list">
-              <span class="tag">React</span>
-              <span class="tag">Electron</span>
-              <span class="tag">HTML/CSS/JS</span>
-              <span class="tag">Express</span>
-            </div>
-          </div>
-        </div>
+      <div class="icon" data-win="contact">
+        <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+        <span data-i18n="contact">Contact</span>
       </div>
-    </section>
+    </div>
 
-    <!-- PROJECTS -->
-    <section id="projects">
-      <div class="wrap">
-        <p class="label">// Projets</p>
-        <h2>Une sélection de ce que j'ai livré.</h2>
-        <div class="project-grid">
-          <div class="project-card">
-            <div class="file-badge">.lua</div>
-            <h3>Ov7_Boutique</h3>
-            <p>Ressource de boutique premium pour serveur FiveM, avec système VIP et état persistant.</p>
-            <div class="project-tags"><span>Lua</span><span>ESX</span><span>oxmysql</span><span>NUI</span></div>
-            <a href="#contact" class="project-link">Voir le projet →</a>
-          </div>
-          <div class="project-card">
-            <div class="file-badge">.js</div>
-            <h3>ov_secure</h3>
-            <p>Bot Discord anti-raid avec une trentaine de modules de protection.</p>
-            <div class="project-tags"><span>Discord.js</span><span>Node.js</span></div>
-            <a href="#contact" class="project-link">Voir le projet →</a>
-          </div>
-          <div class="project-card">
-            <div class="file-badge">.js</div>
-            <h3>over_bot</h3>
-            <p>Bot Discord généraliste, architecture modulaire à base de loader.</p>
-            <div class="project-tags"><span>Discord.js</span><span>Node.js</span></div>
-            <a href="#contact" class="project-link">Voir le projet →</a>
-          </div>
-          <div class="project-card">
-            <div class="file-badge">.tsx</div>
-            <h3>VaultDesk</h3>
-            <p>Application desktop avec authentification, explorateur de fichiers et module d'administration.</p>
-            <div class="project-tags"><span>Electron</span><span>React</span></div>
-            <a href="#contact" class="project-link">Voir le projet →</a>
-          </div>
-          <div class="project-card">
-            <div class="file-badge">.html/css/js</div>
-            <h3>Owo-Search</h3>
-            <p>Logiciel de recherche en tout types de base de donnée, informations indexées et consultables.</p>
-            <div class="project-tags"><span>HTML/CSS/JS</span></div>
-            <a href="#contact" class="project-link">Voir le projet →</a>
-          </div>
-          <div class="project-card">
-            <div class="file-badge">.jsx</div>
-            <h3>Projet scolaire</h3>
-            <p>Site web avec carte intéractive de la Sicile dans le cardre d'un projet scolaire en partenariat avec
-              Erasmus +</p>
-            <div class="project-tags"><span>React</span></div>
-            <a href="#contact" class="project-link">Voir le projet →</a>
-          </div>
+    <!-- WINDOWS -->
+    <div class="window explorer-window" id="win-projets" style="top:64px; left:130px;">
+      <div class="win-titlebar"><div class="win-title"><span class="sq"></span><span id="explorerTitle" data-i18n="winProjects">~/Mes-Projets</span></div><div class="win-controls"><div class="win-min" data-min title="Réduire" data-i18n-title="winMin" aria-label="Réduire" data-i18n-aria="winMin" role="button" tabindex="0">&#8722;</div><div class="win-max" data-max title="Agrandir" data-i18n-title="winMax" aria-label="Agrandir" data-i18n-aria="winMax" role="button" tabindex="0">&#9633;</div><div class="win-close" data-close title="Fermer" data-i18n-title="winClose" aria-label="Fermer" data-i18n-aria="winClose" role="button" tabindex="0">&#10005;</div></div></div>
+      <div class="explorer-toolbar">
+        <button class="explorer-nav" id="explorerBack" title="Retour" data-i18n-title="explorerBack" aria-label="Retour" data-i18n-aria="explorerBack">‹</button>
+        <button class="explorer-nav" id="explorerUp" title="Dossier parent" data-i18n-title="explorerUp" aria-label="Dossier parent" data-i18n-aria="explorerUp">↑</button>
+        <div class="breadcrumbs" id="breadcrumbs"><button data-path="root" data-i18n="favProjects">Mes Projets</button></div>
+        <span class="explorer-status" id="explorerStatus">8 projets</span>
+      </div>
+      <div class="explorer-layout">
+        <aside class="explorer-sidebar"><small data-i18n="favorites">FAVORIS</small><button class="favorite active">⌂ <span data-i18n="favProjects">Mes Projets</span></button><button class="favorite">★ <span data-i18n="favRecent">Projets récents</span></button></aside>
+        <div class="explorer-content">
+          <div class="file-head"><span data-i18n="colName">Nom</span><span data-i18n="colType">Type</span><span data-i18n="colModified">Modifié</span></div>
+          <div id="projectRows" class="project-rows" role="listbox" aria-label="Fichiers et dossiers de projets"></div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- CONTACT -->
-    <section id="contact">
-      <div class="wrap contact-grid">
-        <div class="contact-note">
-          <p class="label">// Contact</p>
-          <h2>Un projet en tête ?</h2>
-          <p>Décris-moi ton besoin — serveur FiveM, bot Discord ou outil sur mesure — et je reviens vers toi rapidement.
-          </p>
-          <div class="contact-links">
-            <a href="#" onclick="copyText('user.ov7','Discord copié !'); return false;">Discord — user.ov7</a>
-            <a href="mailto:arthur.calvet@hotmail.com">Email — arthur.calvet@hotmail.com</a>
+    <div class="window editor-window" id="win-editor" style="top:120px; left:230px;">
+      <div class="win-titlebar"><div class="win-title"><span class="sq"></span><span id="editorTitle">description.txt</span></div><div class="win-controls"><div class="win-min" data-min title="Réduire" data-i18n-title="winMin" aria-label="Réduire" data-i18n-aria="winMin" role="button" tabindex="0">&#8722;</div><div class="win-max" data-max title="Agrandir" data-i18n-title="winMax" aria-label="Agrandir" data-i18n-aria="winMax" role="button" tabindex="0">&#9633;</div><div class="win-close" data-close title="Fermer" data-i18n-title="winClose" aria-label="Fermer" data-i18n-aria="winClose" role="button" tabindex="0">&#10005;</div></div></div>
+      <div class="editor-body"><div class="editor-meta" data-i18n="editorMeta">DOCUMENT TEXTE · sauvegarde locale par projet</div><textarea id="descriptionEditor" aria-label="Description du projet" data-i18n-aria="editorDesc"></textarea><div class="editor-actions"><span id="editorSaved" data-i18n="editorReady">Prêt à modifier</span><button id="saveDescription" data-i18n="editorSaveBtn">Enregistrer</button></div></div>
+    </div>
+
+    <div class="window about-window" id="win-apropos" style="top:76px; left:calc(50% - 325px);">
+      <div class="win-titlebar"><div class="win-title"><span class="sq"></span><span data-i18n="winAbout">~/A-Propos</span></div><div class="win-controls"><div class="win-min" data-min title="Réduire" data-i18n-title="winMin" aria-label="Réduire" data-i18n-aria="winMin" role="button" tabindex="0">&#8722;</div><div class="win-max" data-max title="Agrandir" data-i18n-title="winMax" aria-label="Agrandir" data-i18n-aria="winMax" role="button" tabindex="0">&#9633;</div><div class="win-close" data-close title="Fermer" data-i18n-title="winClose" aria-label="Fermer" data-i18n-aria="winClose" role="button" tabindex="0">&#10005;</div></div></div>
+      <div class="win-body">
+        <h3 data-i18n="about">À Propos</h3>
+        <p class="about-intro" data-i18n="aboutIntro">Développeur full-stack — applications desktop et web orientées outils d'administration et sécurité. Stack principale : Electron, React, Node.js/Express, PostgreSQL.</p>
+        <div class="about-timeline-wrap" id="aboutTimelineWrap">
+          <div class="about-timeline-caption" data-i18n="aboutCaption">Parcours // repères temporels</div>
+          <svg class="about-timeline" id="aboutTimeline" viewBox="0 0 600 250" role="img" aria-label="Timeline du parcours">
+            <defs>
+              <linearGradient id="aboutFlameGradient" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="var(--accent-dark)"/><stop offset="42%" stop-color="var(--flame-core)"/><stop offset="72%" stop-color="var(--flame-tip)"/><stop offset="100%" stop-color="#fff0a3"/>
+              </linearGradient>
+              <filter id="aboutFlameGlow" x="-30%" y="-70%" width="160%" height="240%"><feGaussianBlur stdDeviation="2.2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <filter id="aboutFlameBlur" x="-30%" y="-70%" width="160%" height="240%"><feTurbulence type="fractalNoise" baseFrequency=".025" numOctaves="2" seed="7" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="3"/><feGaussianBlur stdDeviation="4"/></filter>
+            </defs>
+            <path id="aboutTimelineArrowGlow" class="about-arrow-glow" d="M 26 192 C 104 146, 125 205, 190 157 S 287 82, 347 130 S 430 198, 489 116 L 548 66 M 548 66 L 519 73 M 548 66 L 540 94"/>
+            <path id="aboutTimelineArrow" class="about-arrow" d="M 26 192 C 104 146, 125 205, 190 157 S 287 82, 347 130 S 430 198, 489 116 L 548 66 M 548 66 L 519 73 M 548 66 L 540 94"/>
+            <g id="aboutTimelinePoints" class="about-timeline-points" aria-label="Repères de timeline"></g>
+          </svg>
+          <div id="aboutTimelineTooltip" class="about-timeline-tooltip" role="status" aria-live="polite"><strong></strong><span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="window competences-window" id="win-competences" style="top:70px; left:calc(50% - 320px);">
+      <div class="win-titlebar"><div class="win-title"><span class="sq"></span><span data-i18n="winSkills">~/Competences</span></div><div class="win-controls"><div class="win-min" data-min title="Réduire" data-i18n-title="winMin" aria-label="Réduire" data-i18n-aria="winMin" role="button" tabindex="0">&#8722;</div><div class="win-max" data-max title="Agrandir" data-i18n-title="winMax" aria-label="Agrandir" data-i18n-aria="winMax" role="button" tabindex="0">&#9633;</div><div class="win-close" data-close title="Fermer" data-i18n-title="winClose" aria-label="Fermer" data-i18n-aria="winClose" role="button" tabindex="0">&#10005;</div></div></div>
+      <div class="win-body competences-body">
+        <div class="competences-head">
+          <h3 data-i18n="skills">Compétences</h3>
+          <p data-i18n="skillsIntro">Un écosystème d'outils que j'utilise au quotidien, classés par orbite : le cœur du langage, le frontend, puis le backend.</p>
+        </div>
+        <div class="galaxy" id="galaxy">
+          <div class="galaxy-ring" style="width:130px;height:130px;"></div>
+          <div class="galaxy-ring" style="width:230px;height:230px;"></div>
+          <div class="galaxy-ring" style="width:330px;height:330px;"></div>
+          <div class="galaxy-ring" style="width:430px;height:430px;"></div>
+          <div class="galaxy-sun"><span class="sun-glyph">&lt;/&gt;</span></div>
+          <div class="galaxy-sun-label">ARTHUR</div>
+          <div class="skill-tooltip" id="skillTooltip"><strong id="skillTooltipName"></strong><span id="skillTooltipCat"></span></div>
+        </div>
+        <div class="galaxy-legend">
+          <span class="legend-chip core"><i class="dot core"></i><span data-i18n="skillCore">Core</span></span>
+          <span class="legend-chip frontend"><i class="dot frontend"></i><span data-i18n="skillFrontend">Frontend</span></span>
+          <span class="legend-chip backend"><i class="dot backend"></i><span data-i18n="skillBackend">Backend</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="window" id="win-contact" style="top:172px; left:250px;">
+      <div class="win-titlebar"><div class="win-title"><span class="sq"></span><span data-i18n="winContact">~/Contact</span></div><div class="win-controls"><div class="win-min" data-min title="Réduire" data-i18n-title="winMin" aria-label="Réduire" data-i18n-aria="winMin" role="button" tabindex="0">&#8722;</div><div class="win-max" data-max title="Agrandir" data-i18n-title="winMax" aria-label="Agrandir" data-i18n-aria="winMax" role="button" tabindex="0">&#9633;</div><div class="win-close" data-close title="Fermer" data-i18n-title="winClose" aria-label="Fermer" data-i18n-aria="winClose" role="button" tabindex="0">&#10005;</div></div></div>
+      <div class="win-body contact-body">
+        <div class="contact-head">
+          <h3 data-i18n="contact">Contact</h3>
+          <p class="about-intro" data-i18n="contactIntro">Le plus simple pour me joindre : mail ou Discord. Un clic copie l'info dans le presse-papiers.</p>
+        </div>
+        <div class="contact-list">
+          <button class="contact-item" type="button" data-copy="arthur.calvet@hotmail.com">
+            <span class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+            <span class="contact-info"><span class="contact-label" data-i18n="contactEmail">Email</span><span class="contact-value">arthur.calvet@hotmail.com</span></span>
+            <span class="contact-action" data-i18n="contactCopy">Copier</span>
+          </button>
+          <button class="contact-item" type="button" data-copy="user.ov7">
+            <span class="contact-icon"><img src="https://cdn.simpleicons.org/discord/5865F2" alt="Discord"></span>
+            <span class="contact-info"><span class="contact-label" data-i18n="contactDiscord">Discord</span><span class="contact-value">user.ov7</span></span>
+            <span class="contact-action" data-i18n="contactCopy">Copier</span>
+          </button>
+        </div>
+        <div class="contact-foot" data-i18n="contactFoot">Réponse habituelle sous 24 à 48h.</div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="window" id="win-settings" style="top:84px; left:calc(50% - 230px);">
+      <div class="win-titlebar"><div class="win-title"><span class="sq"></span><span data-i18n="settingsTitle">~/Paramètres</span></div><div class="win-controls"><div class="win-min" data-min title="Réduire" data-i18n-title="winMin" aria-label="Réduire" data-i18n-aria="winMin" role="button" tabindex="0">&#8722;</div><div class="win-max" data-max title="Agrandir" data-i18n-title="winMax" aria-label="Agrandir" data-i18n-aria="winMax" role="button" tabindex="0">&#9633;</div><div class="win-close" data-close title="Fermer" data-i18n-title="winClose" aria-label="Fermer" data-i18n-aria="winClose" role="button" tabindex="0">&#10005;</div></div></div>
+      <div class="settings-shell">
+        <section class="settings-panel" data-panel="general">
+          <h3 class="settings-heading" data-i18n="generalHeading">Préférences générales</h3>
+          <div class="settings-row"><div class="settings-label"><span data-i18n="language">Langue</span><span class="settings-help" data-i18n="languageHelp">Choisissez la langue de l’interface.</span></div><div class="lang-switch"><button class="lang-btn active" data-lang="fr">FR</button><button class="lang-btn" data-lang="en">EN</button></div></div>
+        </section>
+        <section class="settings-panel" data-panel="appearance">
+          <h3 class="settings-heading" data-i18n="appearanceHeading">Couleur d’accent</h3>
+          <div class="settings-row"><div class="settings-label"><span data-i18n="accent">Accent système</span><span class="settings-help" data-i18n="accentHelp">La couleur dominante est appliquée en direct.</span></div><div class="accent-grid" aria-label="Accent colors"><button class="accent-dot" data-accent="red" style="background:var(--accent-color)" title="Red"></button><button class="accent-dot" data-accent="green" style="background:#25b579" title="Green"></button><button class="accent-dot" data-accent="violet" style="background:#9b6cff" title="Violet"></button><button class="accent-dot" data-accent="blue" style="background:#3b9cff" title="Blue"></button><button class="accent-dot" data-accent="yellow" style="background:#e5b93f" title="Yellow"></button></div></div>
+        </section>
+        <section class="settings-panel" data-panel="audio">
+          <h3 class="settings-heading" data-i18n="audioHeading">Audio système</h3>
+          <div class="settings-row"><div class="settings-label"><span data-i18n="volume">Volume général</span><span class="settings-help" data-i18n="volumeHelp">Contrôle le moteur SFX de 7OS.</span></div><div class="volume-wrap"><input id="settingsVolume" class="volume-range" type="range" min="0" max="100" value="55"><output id="settingsVolumeValue" class="volume-value">55%</output></div></div>
+          <div class="settings-row"><div class="settings-label" data-i18n="mute">Silencieux</div><button id="settingsMute" class="toggle" type="button" aria-pressed="false"></button></div>
+        </section>
+      </div>
+    </div>
+
+    <!-- TRAY PANEL -->
+    <div class="tray-panel" id="trayPanel">
+      <div class="tray-grid">
+        <div class="tray-item" data-name="Lua"><img src="https://cdn.simpleicons.org/lua/2C2D72" alt="Lua"></div>
+        <div class="tray-item" data-name="GitHub"><img src="https://cdn.simpleicons.org/github/eae7e0" alt="GitHub"></div>
+        <div class="tray-item" data-name="React"><img src="https://cdn.simpleicons.org/react/61DAFB" alt="React"></div>
+        <div class="tray-item" data-name="TypeScript"><img src="https://cdn.simpleicons.org/typescript/3178C6" alt="TypeScript"></div>
+        <div class="tray-item" data-name="Node.js"><img src="https://cdn.simpleicons.org/nodedotjs/5FA04E" alt="Node.js"></div>
+        <div class="tray-item" data-name="Tailwind CSS"><img src="https://cdn.simpleicons.org/tailwindcss/38BDF8" alt="Tailwind CSS"></div>
+        <div class="tray-item" data-name="HTML5"><img src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5"></div>
+        <div class="tray-item" data-name="CSS3"><img src="data:image/png;base64,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" alt="CSS3"></div>
+        <div class="tray-item" data-name="JavaScript"><img src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="JavaScript"></div>
+        <div class="tray-item" data-name="PostgreSQL"><img src="https://cdn.simpleicons.org/postgresql/4169E1" alt="PostgreSQL"></div>
+        <div class="tray-item" data-name="Electron"><img src="https://cdn.simpleicons.org/electron/47848F" alt="Electron"></div>
+        <div class="tray-item" data-name="Discord"><img src="https://cdn.simpleicons.org/discord/5865F2" alt="Discord"></div>
+        <div class="tray-item" data-name="MySQL"><img src="https://cdn.simpleicons.org/mysql/4479A1" alt="MySQL"></div>
+        <div class="tray-item" data-name="Minecraft"><img src="data:image/png;base64,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" alt="Minecraft"></div>
+        <div class="tray-item" data-name="FiveM"><img src="https://cdn.simpleicons.org/fivem/eae7e0" alt="FiveM"></div>
+      </div>
+    </div>
+
+    <!-- FLAME START MENU -->
+    <div class="flame-menu" id="flameMenu">
+      <div class="flame-menu-top">
+        <svg class="flame-menu-logo" viewBox="0 0 200 220">
+          <path fill="var(--blood)" d="M100,10 C128,42 118,60 132,72 C154,90 168,110 162,140 C158,162 144,176 138,196
+            C150,182 158,168 158,150 C170,168 166,190 148,206 C130,220 108,214 100,208
+            C92,214 70,220 52,206 C34,190 30,168 42,150 C42,168 50,182 62,196
+            C56,176 42,162 38,140 C32,110 46,90 68,72 C82,60 72,42 100,10 Z"/>
+        </svg>
+        <div class="flame-menu-close" id="flameMenuClose">✕</div>
+      </div>
+
+      <div class="flame-menu-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" id="flameMenuSearch" placeholder="Rechercher dans 7OS..." data-i18n-placeholder="searchPlaceholder" autocomplete="off">
+      </div>
+
+      <div class="flame-menu-section-label" id="flameMenuLabel" data-i18n="pinned">Épinglés</div>
+      <div class="flame-menu-body">
+        <div class="flame-menu-empty" id="flameMenuEmpty" data-i18n="noResults">Aucun résultat</div>
+        <div class="flame-menu-grid" id="flameMenuGrid">
+          <div class="flame-menu-app" data-win="projets" data-keywords="projets projects portfolio travaux réalisations">
+            <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="1.6"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg></div>
+            <span data-i18n="projects">Mes Projets</span>
+          </div>
+          <div class="flame-menu-app" data-win="apropos" data-keywords="a propos about qui suis-je bio profil">
+            <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4.5 5-6 8-6s6.5 1.5 8 6"/></svg></div>
+            <span data-i18n="about">À Propos</span>
+          </div>
+          <div class="flame-menu-app" data-win="competences" data-keywords="competences skills stack technique react node electron">
+            <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="1"/></svg></div>
+            <span data-i18n="skills">Compétences</span>
+          </div>
+          <div class="flame-menu-app" data-win="contact" data-keywords="contact mail email discord github">
+            <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+            <span data-i18n="contact">Contact</span>
           </div>
         </div>
-        <form id="contactForm" action="https://formsubmit.co/arthur.calvet@hotmail.com" method="POST">
-
-          <!-- Config FormSubmit -->
-          <input type="hidden" name="_subject" value="Nouveau message depuis le portfolio">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_next" value="https://ov7.fr/merci.html">
-          <input type="hidden" name="_template" value="table">
-          <!-- Champ anti-spam -->
-          <input type="text" name="_honey" style="display:none">
-
-          <div class="form-group">
-            <label for="name">Nom / Pseudo</label>
-            <input id="name" name="name" type="text" placeholder="Ex: Jean Dupont" required>
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" placeholder="votre@email.com" required>
-          </div>
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" placeholder="Décris ton projet..." required></textarea>
-          </div>
-          <button type="submit">Envoyer →</button>
-          <p class="form-status" id="formStatus"></p>
-        </form>
       </div>
-    </section>
 
-  </main>
+      <div class="flame-menu-bottom">
+        <div class="flame-menu-user"><span class="sq"></span>guest@7os</div>
+        <div class="flame-menu-settings" id="settingsLauncher" title="Paramètres" data-i18n-title="settingsLabel" role="button" tabindex="0" aria-label="Paramètres" data-i18n-aria="settingsLabel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.14.31.44.53.79.6.35.07.71.02 1-.14"/></svg>
+        </div>
+      </div>
+    </div>
 
-  <footer class="wrap">
-    <span>© 2026 Ov7. Tous droits réservés.</span>
-    <span>Conçu &amp; codé par Ov7</span>
-  </footer>
+    <div class="taskbar">
+      <div class="tb-left">
+        <div class="flame-btn">
+          <svg viewBox="0 0 200 220">
+            <defs>
+              <linearGradient id="tbFlameGrad" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stop-color="#7a0d1a"/>
+                <stop offset="55%" stop-color="var(--accent-color)"/>
+                <stop offset="100%" stop-color="#ff9a3d"/>
+              </linearGradient>
+            </defs>
+            <path fill="url(#tbFlameGrad)" d="M100,10 C128,42 118,60 132,72 C154,90 168,110 162,140 C158,162 144,176 138,196
+              C150,182 158,168 158,150 C170,168 166,190 148,206 C130,220 108,214 100,208
+              C92,214 70,220 52,206 C34,190 30,168 42,150 C42,168 50,182 62,196
+              C56,176 42,162 38,140 C32,110 46,90 68,72 C82,60 72,42 100,10 Z"/>
+          </svg>
+        </div>
+        <div class="tb-minimized" id="tbMinimized"></div>
+      </div>
+      <div class="tb-right">
+        <div class="sfx-btn" id="sfxBtn" title="Activer / couper le son">
+          <svg id="sfxIconOn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 010 7"/><path d="M19 6a9 9 0 010 12"/></svg>
+          <svg id="sfxIconOff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>
+        </div>
+        <div class="caret-btn" title="Afficher les icônes masquées">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+        </div>
+        <svg class="tb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 9a15 15 0 0120 0M5 12.5a10 10 0 0114 0M8.5 16a5 5 0 017 0"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+        <svg class="tb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 5L6 9H3v6h3l5 4V5z"/></svg>
+        <svg class="tb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 10v4"/></svg>
+        <div class="clock" id="clock">--:--<small>--/--/----</small></div>
+      </div>
+    </div>
+  </div>
 
-  <div class="toast" id="toast"><span id="toastMsg"></span></div>
+</div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"8607d2a720d14b038279025b2b5a82e5"}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"8607d2a720d14b038279025b2b5a82e5"}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"8607d2a720d14b038279025b2b5a82e5"}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"8607d2a720d14b038279025b2b5a82e5"}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"8607d2a720d14b038279025b2b5a82e5"}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"8607d2a720d14b038279025b2b5a82e5"}' crossorigin="anonymous"></script>
 </body>
-
 </html>

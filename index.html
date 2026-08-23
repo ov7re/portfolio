@@ -134,6 +134,10 @@
         <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
         <span data-i18n="contact">Contact</span>
       </div>
+      <div class="icon" data-win="avis">
+        <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3.6l2.6 5.3 5.9.85-4.25 4.15 1 5.85L12 16.99l-5.25 2.76 1-5.85L3.5 9.75l5.9-.85L12 3.6z"/></svg></div>
+        <span data-i18n="reviews">Avis</span>
+      </div>
     </div>
 
     <!-- WINDOWS -->
@@ -230,6 +234,18 @@
       </div>
     </div>
 
+    <div class="window reviews-window" id="win-avis" style="top:150px; left:300px;">
+      <div class="win-titlebar"><div class="win-title"><span class="sq"></span><span data-i18n="winReviews">~/Avis</span></div><div class="win-controls"><div class="win-min" data-min title="Réduire" data-i18n-title="winMin" aria-label="Réduire" data-i18n-aria="winMin" role="button" tabindex="0">&#8722;</div><div class="win-max" data-max title="Agrandir" data-i18n-title="winMax" aria-label="Agrandir" data-i18n-aria="winMax" role="button" tabindex="0">&#9633;</div><div class="win-close" data-close title="Fermer" data-i18n-title="winClose" aria-label="Fermer" data-i18n-aria="winClose" role="button" tabindex="0">&#10005;</div></div></div>
+      <div class="win-body reviews-body">
+        <div class="reviews-head">
+          <h3 data-i18n="reviews">Avis</h3>
+          <p class="about-intro" data-i18n="reviewsIntro">Ce que disent les personnes avec qui j'ai travaillé.</p>
+        </div>
+        <div class="reviews-list" id="reviewsList"></div>
+        <div class="reviews-foot" id="reviewsFoot" data-i18n="reviewsFoot">Un projet en tête ? Écrivez-moi depuis l'onglet Contact.</div>
+      </div>
+    </div>
+
     <!-- SETTINGS -->
     <div class="window" id="win-settings" style="top:84px; left:calc(50% - 230px);">
       <div class="win-titlebar"><div class="win-title"><span class="sq"></span><span data-i18n="settingsTitle">~/Paramètres</span></div><div class="win-controls"><div class="win-min" data-min title="Réduire" data-i18n-title="winMin" aria-label="Réduire" data-i18n-aria="winMin" role="button" tabindex="0">&#8722;</div><div class="win-max" data-max title="Agrandir" data-i18n-title="winMax" aria-label="Agrandir" data-i18n-aria="winMax" role="button" tabindex="0">&#9633;</div><div class="win-close" data-close title="Fermer" data-i18n-title="winClose" aria-label="Fermer" data-i18n-aria="winClose" role="button" tabindex="0">&#10005;</div></div></div>
@@ -307,6 +323,10 @@
           <div class="flame-menu-app" data-win="contact" data-keywords="contact mail email discord github">
             <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
             <span data-i18n="contact">Contact</span>
+          </div>
+          <div class="flame-menu-app" data-win="avis" data-keywords="avis reviews témoignages clients recommandation feedback">
+            <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3.6l2.6 5.3 5.9.85-4.25 4.15 1 5.85L12 16.99l-5.25 2.76 1-5.85L3.5 9.75l5.9-.85L12 3.6z"/></svg></div>
+            <span data-i18n="reviews">Avis</span>
           </div>
         </div>
       </div>

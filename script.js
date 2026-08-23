@@ -18,6 +18,27 @@ const ABOUT_TIMELINE = {
   ]
 };
 
+/* ------------------------------------------------------------------
+   AVIS CLIENTS — pour en ajouter un, copiez un bloc { … } ci-dessous
+   et complétez-le. Rien d'autre à toucher, la fenêtre se met à jour seule.
+
+   name    : nom affiché (écrit tel quel, apostrophes comprises)
+   role    : ligne secondaire sous le nom (optionnel)
+   date    : petite date en haut à droite (optionnel)
+   stars   : note de 0 à 5 (optionnel, 5 par défaut — mettez 0 pour la masquer)
+   text    : l'avis. Soit une simple chaîne, soit {fr:'…', en:'…'} pour
+             une version par langue. Sautez une ligne (\n\n) pour un paragraphe.
+   ------------------------------------------------------------------ */
+const REVIEWS = [
+  {
+    name: "Paul'",
+    role: '',
+    date: '',
+    stars: 5,
+    text: "Super prestation réalisée très rapidement. Elle correspond parfaitement à ce que j’attendais, Ov7 a su être flexible quant à mes attentes et mon budget.\n\nJe ne peux que le recommander vivement !"
+  }
+];
+
 /* ============================================================
    SFX ENGINE — sons synthétisés en direct (Web Audio API),
    aucun fichier externe requis.
@@ -194,6 +215,10 @@ const settingsI18n = {
     skillsIntro:'Un écosystème d\'outils que j\'utilise au quotidien, classés par orbite : le cœur du langage, le frontend, puis le backend.',
     contactIntro:'Le plus simple pour me joindre : mail ou Discord. Un clic copie l\'info dans le presse-papiers.',
     contactEmail:'Email', contactDiscord:'Discord', contactCopy:'Copier', contactCopied:'Copié !',
+    reviews:'Avis', winReviews:'~/Avis',
+    reviewsIntro:'Ce que disent les personnes avec qui j’ai travaillé.',
+    reviewsFoot:'Un projet en tête ? Écrivez-moi depuis l’onglet Contact.',
+    reviewsEmpty:'Aucun avis pour le moment.',
     winMin:'Réduire', winMax:'Agrandir', winRestore:'Restaurer', winClose:'Fermer'
   },
   en:{
@@ -217,6 +242,10 @@ const settingsI18n = {
     skillsIntro:'A toolkit I use daily, grouped by orbit: core language, frontend, then backend.',
     contactIntro:'The simplest way to reach me: email or Discord. One click copies it to your clipboard.',
     contactEmail:'Email', contactDiscord:'Discord', contactCopy:'Copy', contactCopied:'Copied!',
+    reviews:'Reviews', winReviews:'~/Reviews',
+    reviewsIntro:'What the people I have worked with have to say.',
+    reviewsFoot:'Got a project in mind? Reach me from the Contact tab.',
+    reviewsEmpty:'No reviews yet.',
     winMin:'Minimize', winMax:'Maximize', winRestore:'Restore', winClose:'Close'
   }
 };
@@ -236,6 +265,7 @@ function applyLanguage(){
   if(!i18nReady) return;
   renderExplorer();
   if(document.getElementById('win-apropos') && document.getElementById('win-apropos').classList.contains('open')) initAboutTimeline();
+  renderReviews();
   const editor=document.getElementById('descriptionEditor');
   const savedLabel=document.getElementById('editorSaved');
   if(editor && savedLabel && !editor.dataset.project) savedLabel.textContent=dict.editorReady;
@@ -518,6 +548,72 @@ document.querySelectorAll('.contact-item').forEach(item=>{
   });
   item.addEventListener('mouseenter', ()=> SFX.hover());
 });
+
+// --- Avis clients: rendu depuis le tableau REVIEWS (voir en haut du fichier) ---
+function renderReviews(){
+  const list = document.getElementById('reviewsList');
+  if(!list) return;
+  const dict = settingsI18n[prefs.lang];
+  list.innerHTML = '';
+  if(!REVIEWS.length){
+    const empty = document.createElement('p');
+    empty.className = 'reviews-empty';
+    empty.textContent = dict.reviewsEmpty;
+    list.appendChild(empty);
+    return;
+  }
+  REVIEWS.forEach(review=>{
+    const body = typeof review.text === 'string' ? review.text : (review.text[prefs.lang] || review.text.fr || '');
+    const stars = review.stars === undefined ? 5 : review.stars;
+    const card = document.createElement('article');
+    card.className = 'review-card';
+
+    const head = document.createElement('header');
+    head.className = 'review-head';
+    const avatar = document.createElement('span');
+    avatar.className = 'review-avatar';
+    avatar.textContent = (review.name || '?').trim().charAt(0).toUpperCase();
+    const who = document.createElement('span');
+    who.className = 'review-who';
+    const name = document.createElement('span');
+    name.className = 'review-name';
+    name.textContent = review.name || '';
+    who.appendChild(name);
+    if(review.role){
+      const role = document.createElement('span');
+      role.className = 'review-role';
+      role.textContent = review.role;
+      who.appendChild(role);
+    }
+    head.appendChild(avatar);
+    head.appendChild(who);
+    if(stars > 0){
+      const rating = document.createElement('span');
+      rating.className = 'review-stars';
+      rating.setAttribute('aria-label', stars + '/5');
+      rating.textContent = '★'.repeat(stars) + '☆'.repeat(Math.max(0, 5 - stars));
+      head.appendChild(rating);
+    }
+    if(review.date){
+      const date = document.createElement('span');
+      date.className = 'review-date';
+      date.textContent = review.date;
+      head.appendChild(date);
+    }
+    card.appendChild(head);
+
+    const quote = document.createElement('blockquote');
+    quote.className = 'review-text';
+    body.split(/\n\s*\n/).forEach(paragraph=>{
+      const p = document.createElement('p');
+      p.textContent = paragraph.trim();
+      quote.appendChild(p);
+    });
+    card.appendChild(quote);
+    list.appendChild(card);
+  });
+}
+renderReviews();
 
 // --- galaxie de competences ---
 const SKILLS = [

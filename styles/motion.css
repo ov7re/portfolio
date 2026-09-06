@@ -1,0 +1,177 @@
+/* ==========================================================================
+   OV7 Development — Couche mouvement
+   Scène 3D, voiles de transition, états de départ des animations.
+
+   Règle de sécurité : un élément n'est masqué que tant qu'un mécanisme actif
+   s'engage à le révéler (`html.motion` pour GSAP, `html.reveal-js` pour le
+   repli). Sans JavaScript, CDN bloqué ou module en échec, rien n'est caché.
+   ========================================================================== */
+
+/* ========================= Scène 3D ========================= */
+.scene{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  display:block;
+  width:100%;
+  height:100%;
+}
+
+/* Voile de lisibilité : la 3D ne doit jamais gêner la lecture du texte. */
+.scene-scrim{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  /* Un voile plat pour garantir le contraste du texte, plus une vignette qui
+     concentre la matière au centre. Assez léger pour laisser voir la 3D. */
+  background:
+    radial-gradient(ellipse 78% 62% at 50% 45%, transparent 0%, var(--bg) 92%),
+    var(--bg);
+  opacity:.56;
+}
+:root[data-theme="light"] .scene-scrim{opacity:.72;}
+
+/* Le contenu passe devant la scène.
+   Attention : ne jamais toucher au `position` du header ni du menu mobile —
+   ils sont fixes, et les repasser en `relative` les remettrait dans le flux. */
+main,
+.footer{position:relative;z-index:1;}
+
+/* Les sections posées sur une surface pleine masquent la 3D : on la laisse
+   respirer uniquement là où elle apporte quelque chose. */
+.stats,
+.reviews{position:relative;z-index:1;background:color-mix(in srgb,var(--bg-soft) 92%,transparent);}
+
+/* ========================= Barre de progression ========================= */
+.scroll-progress{
+  position:fixed;
+  top:0;left:0;right:0;
+  height:2px;
+  z-index:calc(var(--z-header) + 1);
+  background:linear-gradient(90deg,var(--brand),var(--brand-ember),var(--brand-glow));
+  transform:scaleX(0);
+  transform-origin:0 50%;
+  pointer-events:none;
+}
+
+/* ========================= Voile de transition ========================= */
+/* Hors écran par défaut : le voile ne sert qu'à quitter la page. Il ne peut
+   donc jamais rester bloqué devant le contenu si une animation échoue. */
+.curtain{
+  position:fixed;
+  inset:0;
+  z-index:calc(var(--z-modal) + 10);
+  background:linear-gradient(160deg,var(--bg-soft),var(--bg));
+  pointer-events:none;
+  display:grid;
+  place-items:center;
+  transform:translateY(100%);
+}
+.curtain__mark{
+  font-family:var(--font-mono);
+  font-size:var(--fs-label);
+  letter-spacing:.4em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+
+/* ========================= Texte masqué ========================= */
+.line{
+  display:block;
+  overflow:hidden;
+  padding-bottom:.06em;
+}
+.line__inner{display:block;}
+
+/* ========================= États de départ =========================
+   Règle : un élément n'est masqué que tant qu'un mécanisme actif s'engage à
+   le révéler. Chaque voie pose elle-même sa classe sur <html> :
+   · html.motion     → GSAP anime (classe posée avant le rendu, retirée par
+                       le filet du <head> si la couche ne confirme pas)
+   · html.reveal-js  → repli maison (classe posée par observeReveals())
+   Si aucune des deux n'est présente — pas de JavaScript, CDN bloqué, module
+   en échec — rien n'est caché. */
+html.motion [data-anim="fade"]{opacity:0;transform:translateY(26px);}
+html.motion [data-anim="card"]{opacity:0;transform:translateY(30px) scale(.985);}
+html.motion [data-anim="mask"]{will-change:transform;}
+
+html.reveal-js [data-anim]{
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity .7s var(--ease-out), transform .7s var(--ease-out);
+  transition-delay:var(--reveal-delay,0ms);
+}
+html.reveal-js [data-anim].is-visible{opacity:1;transform:none;}
+
+/* --- Hero : états de départ de la séquence d'ouverture ---
+   Ils vivent en CSS et non dans un `gsap.from()` : si la timeline ne
+   démarrait pas, le hero resterait vide. Ici, retirer `html.motion` suffit
+   à tout rendre visible — c'est exactement ce que fait le filet du <head>. */
+html.motion [data-hero-label],
+html.motion [data-hero-lead],
+html.motion [data-hero-visual]{opacity:0;}
+html.motion [data-hero-label]{transform:translateY(14px);}
+html.motion [data-hero-lead]{transform:translateY(26px);}
+html.motion [data-hero-visual]{transform:translateY(40px);}
+html.motion [data-hero-actions] > *,
+html.motion [data-hero-meta] span{opacity:0;transform:translateY(16px);}
+html.motion .hero__title .line__inner{transform:translateY(108%);}
+html.motion [data-hero-visual] .code-line{opacity:0;}
+
+/* ========================= Méthode : piste horizontale ========================= */
+.process-viewport{
+  position:relative;
+  overflow:hidden;
+  padding-block:var(--sp-5);
+}
+.process-track{
+  display:flex;
+  gap:var(--sp-4);
+  padding-inline:var(--gutter);
+  width:max-content;
+  will-change:transform;
+}
+.process-track .step{
+  flex:0 0 clamp(260px,26vw,340px);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  background:var(--surface);
+  min-height:210px;
+}
+.process-track .step::after{border-radius:var(--r-lg) 0 0 var(--r-lg);}
+
+/* Sur grand écran, la section se fige pendant la traversée des étapes. */
+@media (min-width:901px){
+  .process{min-height:100vh;display:flex;flex-direction:column;justify-content:center;}
+  html.motion .process-track .step{opacity:.35;transform:scale(.97);}
+}
+
+/* En dessous, les étapes s'empilent : aucun défilement détourné. */
+@media (max-width:900px){
+  .process-track{
+    flex-direction:column;
+    width:auto;
+    padding-inline:0;
+    transform:none!important;
+  }
+  .process-track .step{flex:1 1 auto;min-height:0;}
+  .process-viewport{overflow:visible;}
+}
+
+/* ========================= Profondeur des cartes projet ========================= */
+.projects-grid{perspective:1200px;}
+.project-card{transform-style:preserve-3d;}
+.project-card__media{overflow:hidden;}
+
+/* ========================= Mouvement réduit ========================= */
+@media (prefers-reduced-motion:reduce){
+  html.motion [data-anim="fade"],
+  html.motion [data-anim="card"]{opacity:1;transform:none;}
+  .curtain{display:none;}
+  .scroll-progress{display:none;}
+  .process-track{transform:none!important;flex-direction:column;width:auto;}
+  html.motion .process-track .step{opacity:1;transform:none;}
+  .process-viewport{overflow:visible;}
+}

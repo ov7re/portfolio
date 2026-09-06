@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff5a1f"/>
+      <stop offset="60%" stop-color="#d4162c"/>
+      <stop offset="100%" stop-color="#8f0f1e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="78%" cy="18%" r="55%">
+      <stop offset="0%" stop-color="#d4162c" stop-opacity=".30"/>
+      <stop offset="100%" stop-color="#d4162c" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0v48" fill="none" stroke="#ffffff" stroke-opacity=".05" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#08090b"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <g transform="translate(88 96)">
+    <rect width="72" height="72" rx="18" fill="url(#mark)"/>
+    <path d="M25 24h26l-13 28" fill="none" stroke="#fff" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="96" y="32" fill="#edeff2" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="27" font-weight="700" letter-spacing="-.5">OV7</text>
+    <text x="96" y="58" fill="#6e7681" font-family="'JetBrains Mono',monospace" font-size="14" letter-spacing="4.5">DEVELOPMENT</text>
+  </g>
+
+  <text x="88" y="322" fill="#edeff2" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="76" font-weight="700" letter-spacing="-2.5">Des idées. Du code.</text>
+  <text x="88" y="404" fill="#ff5a1f" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="76" font-weight="700" letter-spacing="-2.5">Des solutions.</text>
+
+  <text x="88" y="466" fill="#a7aeb8" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="25">Applications, sites web, logiciels et systèmes sur mesure.</text>
+
+  <g transform="translate(88 522)" font-family="'JetBrains Mono',monospace" font-size="14" letter-spacing="3">
+    <rect width="106" height="38" rx="10" fill="#101317" stroke="#ffffff" stroke-opacity=".1"/>
+    <text x="22" y="24" fill="#a7aeb8">WEB</text>
+    <rect x="118" width="150" height="38" rx="10" fill="#101317" stroke="#ffffff" stroke-opacity=".1"/>
+    <text x="140" y="24" fill="#a7aeb8">SOFTWARE</text>
+    <rect x="280" width="132" height="38" rx="10" fill="#101317" stroke="#ffffff" stroke-opacity=".1"/>
+    <text x="302" y="24" fill="#a7aeb8">GAMING</text>
+  </g>
+
+  <text x="1112" y="566" text-anchor="end" fill="#6e7681" font-family="'JetBrains Mono',monospace" font-size="15" letter-spacing="3">OV7.FR</text>
+</svg>

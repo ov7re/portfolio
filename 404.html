@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page introuvable — OV7 Development</title>
+<meta name="description" content="Cette page n’existe pas ou a été déplacée.">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#08090b">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+
+<link rel="stylesheet" href="/styles/base.css">
+<link rel="stylesheet" href="/styles/components.css">
+<link rel="stylesheet" href="/styles/sections.css">
+<link rel="stylesheet" href="/styles/project.css">
+
+<script>
+  try {
+    var saved = localStorage.getItem('ov7-theme');
+    if (saved === 'light') document.documentElement.dataset.theme = 'light';
+  } catch (e) {}
+</script>
+</head>
+
+<body>
+<main class="container">
+  <div class="project-404">
+    <span class="eyebrow mono">Erreur 404</span>
+    <h1>Page introuvable</h1>
+    <p>
+      Cette page n’existe pas ou a été déplacée. Retrouvez les projets,
+      les services et le formulaire de devis depuis l’accueil.
+    </p>
+    <a class="btn btn--primary" href="/">Retour à l’accueil</a>
+  </div>
+</main>
+</body>
+</html>

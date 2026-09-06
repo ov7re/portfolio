@@ -1,0 +1,334 @@
+/* ==========================================================================
+   OV7 Development — Composants réutilisables
+   Boutons, cartes, badges, en-têtes de section, formulaire, filtres.
+   ========================================================================== */
+
+/* ========================= En-tête de section ========================= */
+.section-head{
+  display:flex;
+  flex-direction:column;
+  gap:var(--sp-4);
+  max-width:56ch;
+  margin-bottom:clamp(2.5rem,5vw,4rem);
+}
+.section-head--center{margin-inline:auto;text-align:center;align-items:center;}
+/* En-tête intégré dans une colonne : l'espacement vient du conteneur parent */
+.section-head--flush{margin-bottom:0;}
+.section-head--split{
+  max-width:none;
+  flex-direction:row;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:var(--sp-6);
+  flex-wrap:wrap;
+}
+.section-head__text{display:flex;flex-direction:column;gap:var(--sp-4);max-width:56ch;}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;
+  color:var(--text-3);
+}
+.eyebrow::before{
+  content:"";
+  width:22px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--brand));
+  flex:none;
+}
+.section-head--center .eyebrow::before{width:16px;}
+
+.section-lead{
+  color:var(--text-2);
+  font-size:var(--fs-lead);
+  line-height:1.7;
+}
+
+/* ========================= Boutons ========================= */
+.btn{
+  --btn-bg:transparent;
+  --btn-fg:var(--text);
+  --btn-line:var(--line-strong);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.55rem;
+  padding:.82rem 1.4rem;
+  min-height:46px;
+  background:var(--btn-bg);
+  color:var(--btn-fg);
+  border:1px solid var(--btn-line);
+  border-radius:var(--r-md);
+  font-size:var(--fs-sm);
+  font-weight:600;
+  letter-spacing:-.01em;
+  text-align:center;
+  cursor:pointer;
+  transition:background-color var(--t) var(--ease),border-color var(--t) var(--ease),
+             color var(--t) var(--ease),transform var(--t-fast) var(--ease),box-shadow var(--t) var(--ease);
+}
+.btn:hover{transform:translateY(-1px);}
+.btn:active{transform:translateY(0);}
+
+.btn--primary{
+  --btn-bg:var(--brand);
+  --btn-fg:var(--text-on-accent);
+  --btn-line:var(--brand);
+  box-shadow:0 10px 30px -14px rgba(var(--brand-rgb),.9);
+}
+.btn--primary:hover{
+  --btn-bg:#e51a33;
+  --btn-line:#e51a33;
+  box-shadow:0 16px 38px -14px rgba(var(--brand-rgb),1);
+}
+
+.btn--ghost{--btn-bg:transparent;}
+.btn--ghost:hover{--btn-line:var(--line-accent);background:var(--accent-quiet);}
+
+.btn--subtle{
+  --btn-bg:var(--surface-2);
+  --btn-line:var(--line);
+}
+.btn--subtle:hover{--btn-line:var(--line-strong);background:var(--surface-3);}
+
+.btn--sm{padding:.55rem 1rem;min-height:38px;font-size:var(--fs-xs);}
+.btn--block{width:100%;}
+.btn__icon{width:16px;height:16px;flex:none;transition:transform var(--t) var(--ease);}
+.btn:hover .btn__icon--arrow{transform:translateX(3px);}
+
+/* Lien texte avec flèche */
+.link-arrow{
+  display:inline-flex;align-items:center;gap:.45rem;
+  color:var(--accent);
+  font-size:var(--fs-sm);font-weight:600;
+  transition:gap var(--t) var(--ease);
+}
+.link-arrow:hover{gap:.75rem;}
+
+/* ========================= Cartes ========================= */
+.card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:var(--sp-3);
+  padding:var(--sp-5);
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  transition:border-color var(--t) var(--ease),background-color var(--t) var(--ease),
+             transform var(--t) var(--ease),box-shadow var(--t) var(--ease);
+}
+.card--hover:hover{
+  transform:translateY(-3px);
+  border-color:var(--line-strong);
+  background:var(--surface-2);
+  box-shadow:var(--shadow-md);
+}
+.card__title{font-size:1.0625rem;font-weight:700;letter-spacing:-.02em;}
+.card__text{color:var(--text-2);font-size:var(--fs-sm);line-height:1.65;}
+
+.card__icon{
+  display:grid;place-items:center;
+  width:42px;height:42px;
+  border-radius:var(--r-md);
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  color:var(--accent);
+  margin-bottom:var(--sp-2);
+}
+.card__icon svg{width:20px;height:20px;}
+.card--hover:hover .card__icon{border-color:var(--line-accent);background:var(--accent-quiet);}
+
+/* ========================= Badges & tags ========================= */
+.tag-list{display:flex;flex-wrap:wrap;gap:.4rem;}
+.tag{
+  display:inline-flex;align-items:center;
+  padding:.28rem .6rem;
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  border-radius:var(--r-sm);
+  color:var(--text-2);
+  font-family:var(--font-mono);
+  font-size:.6875rem;
+  font-weight:500;
+  letter-spacing:.04em;
+  white-space:nowrap;
+}
+.tag--accent{
+  background:var(--accent-quiet);
+  border-color:var(--line-accent);
+  color:var(--accent);
+}
+
+.status-dot{
+  display:inline-flex;align-items:center;gap:.45rem;
+  color:var(--text-3);
+  font-family:var(--font-mono);
+  font-size:var(--fs-label);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.status-dot::before{
+  content:"";
+  width:6px;height:6px;border-radius:var(--r-full);
+  background:var(--brand-ember);
+  box-shadow:0 0 0 3px rgba(255,90,31,.15);
+}
+
+/* ========================= Filtres ========================= */
+.filters{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
+  margin-bottom:var(--sp-6);
+}
+.filter{
+  padding:.5rem 1rem;
+  background:transparent;
+  border:1px solid var(--line);
+  border-radius:var(--r-full);
+  color:var(--text-2);
+  font-size:var(--fs-xs);
+  font-weight:600;
+  letter-spacing:-.005em;
+  transition:color var(--t-fast) var(--ease),border-color var(--t-fast) var(--ease),
+             background-color var(--t-fast) var(--ease);
+}
+.filter:hover{color:var(--text);border-color:var(--line-strong);}
+.filter[aria-pressed="true"]{
+  background:var(--accent-quiet);
+  border-color:var(--line-accent);
+  color:var(--accent);
+}
+.filter__count{
+  margin-left:.4rem;
+  font-family:var(--font-mono);
+  font-size:.6875rem;
+  opacity:.6;
+}
+
+/* ========================= Formulaire ========================= */
+.field{display:flex;flex-direction:column;gap:.5rem;}
+.field__label{
+  font-size:var(--fs-xs);
+  font-weight:600;
+  color:var(--text-2);
+  letter-spacing:-.005em;
+}
+.field__req{color:var(--accent);margin-left:.15rem;}
+.field__hint{font-size:var(--fs-xs);color:var(--text-3);}
+
+.input,.textarea,.select{
+  width:100%;
+  padding:.8rem 1rem;
+  min-height:48px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-md);
+  color:var(--text);
+  font-size:var(--fs-sm);
+  transition:border-color var(--t-fast) var(--ease),background-color var(--t-fast) var(--ease),
+             box-shadow var(--t-fast) var(--ease);
+}
+.input::placeholder,.textarea::placeholder{color:var(--text-3);}
+.input:hover,.textarea:hover,.select:hover{border-color:var(--line-strong);}
+.input:focus,.textarea:focus,.select:focus{
+  outline:none;
+  border-color:var(--line-accent);
+  background:var(--surface-2);
+  box-shadow:0 0 0 3px var(--accent-quiet);
+}
+.textarea{min-height:150px;resize:vertical;line-height:1.6;}
+
+.input[aria-invalid="true"],.textarea[aria-invalid="true"]{
+  border-color:#ff5a5a;
+  box-shadow:0 0 0 3px rgba(255,90,90,.12);
+}
+.field__error{
+  display:none;
+  color:#ff8a8a;
+  font-size:var(--fs-xs);
+  font-weight:500;
+}
+.field__error.is-shown{display:block;}
+
+/* Cases à cocher / radios stylées */
+.choice-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:.5rem;
+}
+.choice{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:.55rem;
+  padding:.65rem .85rem;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-md);
+  font-size:var(--fs-xs);
+  color:var(--text-2);
+  cursor:pointer;
+  transition:border-color var(--t-fast) var(--ease),color var(--t-fast) var(--ease),
+             background-color var(--t-fast) var(--ease);
+}
+.choice:hover{border-color:var(--line-strong);color:var(--text);}
+.choice input{
+  position:absolute;opacity:0;width:1px;height:1px;
+}
+.choice__box{
+  width:16px;height:16px;flex:none;
+  border:1px solid var(--line-strong);
+  border-radius:4px;
+  display:grid;place-items:center;
+  transition:border-color var(--t-fast) var(--ease),background-color var(--t-fast) var(--ease);
+}
+.choice__box::after{
+  content:"";
+  width:8px;height:8px;
+  border-radius:2px;
+  background:var(--brand);
+  opacity:0;
+  transform:scale(.4);
+  transition:opacity var(--t-fast) var(--ease),transform var(--t-fast) var(--ease);
+}
+.choice--radio .choice__box,.choice--radio .choice__box::after{border-radius:var(--r-full);}
+.choice input:checked ~ .choice__box{border-color:var(--line-accent);background:var(--accent-quiet);}
+.choice input:checked ~ .choice__box::after{opacity:1;transform:scale(1);}
+.choice.is-checked{
+  border-color:var(--line-accent);
+  color:var(--text);
+  background:var(--accent-quiet);
+}
+.choice input:focus-visible ~ .choice__box{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+}
+
+/* Message de retour du formulaire */
+.form-status{
+  display:none;
+  padding:.85rem 1.1rem;
+  border-radius:var(--r-md);
+  font-size:var(--fs-sm);
+  border:1px solid var(--line);
+  background:var(--surface-2);
+}
+.form-status.is-shown{display:block;}
+.form-status--ok{border-color:rgba(64,196,138,.35);color:#7ee0ae;background:rgba(64,196,138,.08);}
+.form-status--error{border-color:rgba(255,90,90,.35);color:#ff9b9b;background:rgba(255,90,90,.08);}
+
+/* ========================= Divers ========================= */
+.divider{height:1px;background:var(--line);border:0;}
+
+.grid-lines{
+  position:absolute;inset:0;
+  pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),
+                   linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:64px 64px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 20%,transparent 78%);
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 20%,transparent 78%);
+  opacity:.55;
+}

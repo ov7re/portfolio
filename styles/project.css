@@ -1,0 +1,212 @@
+/* ==========================================================================
+   OV7 Development — Page projet (projet.html)
+   ========================================================================== */
+
+.project-page{padding-top:var(--header-h);}
+
+/* --- Fil d'ariane / retour --- */
+.project-back{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding-block:var(--sp-6) 0;
+  color:var(--text-3);
+  font-size:var(--fs-sm);
+  font-weight:500;
+  transition:color var(--t-fast) var(--ease),gap var(--t) var(--ease);
+}
+.project-back:hover{color:var(--text);gap:.75rem;}
+.project-back svg{width:15px;height:15px;}
+
+/* --- En-tête --- */
+.project-hero{
+  position:relative;
+  padding-block:clamp(2rem,4vw,3rem) clamp(2.5rem,5vw,4rem);
+}
+.project-hero__meta{
+  display:flex;align-items:center;flex-wrap:wrap;gap:.6rem 1rem;
+  margin-bottom:var(--sp-4);
+}
+.project-hero__title{
+  font-size:clamp(2.1rem,5vw,3.5rem);
+  margin-bottom:var(--sp-4);
+}
+.project-hero__lead{
+  max-width:62ch;
+  color:var(--text-2);
+  font-size:var(--fs-lead);
+  line-height:1.75;
+}
+.project-hero__actions{
+  display:flex;flex-wrap:wrap;gap:.6rem;
+  margin-top:var(--sp-5);
+}
+
+.project-cover{
+  margin-bottom:clamp(2.5rem,5vw,4rem);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  background:var(--bg-soft);
+  box-shadow:var(--shadow-md);
+}
+.project-cover img,.project-cover svg{width:100%;height:auto;display:block;}
+
+/* --- Corps : contenu + fiche technique --- */
+.project-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 320px;
+  gap:clamp(2.5rem,5vw,4rem);
+  align-items:start;
+  padding-bottom:var(--section-y);
+}
+.project-content{display:flex;flex-direction:column;gap:clamp(2.25rem,4vw,3.25rem);min-width:0;}
+
+.project-block{display:flex;flex-direction:column;gap:var(--sp-4);}
+.project-block__title{
+  display:flex;align-items:center;gap:.75rem;
+  font-size:1.25rem;
+  font-weight:700;
+  letter-spacing:-.025em;
+}
+.project-block__title::before{
+  content:"";
+  width:14px;height:2px;
+  background:var(--brand);
+  border-radius:2px;
+  flex:none;
+}
+.project-block p{color:var(--text-2);line-height:1.78;}
+
+.feature-list{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;}
+.feature-list li{
+  display:flex;align-items:flex-start;gap:.6rem;
+  padding:.8rem .95rem;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-md);
+  color:var(--text-2);
+  font-size:var(--fs-sm);
+  line-height:1.55;
+  transition:border-color var(--t) var(--ease);
+}
+.feature-list li:hover{border-color:var(--line-strong);}
+.feature-list li::before{
+  content:"";
+  width:5px;height:5px;flex:none;
+  margin-top:.55rem;
+  border-radius:50%;
+  background:var(--brand-ember);
+}
+
+.arch-list{display:flex;flex-direction:column;gap:0;counter-reset:arch;}
+.arch-list li{
+  position:relative;
+  display:flex;gap:1rem;
+  padding:.9rem 0 .9rem 0;
+  border-bottom:1px solid var(--line);
+  color:var(--text-2);
+  font-size:var(--fs-sm);
+  line-height:1.65;
+}
+.arch-list li:last-child{border-bottom:0;}
+.arch-list li::before{
+  counter-increment:arch;
+  content:counter(arch,decimal-leading-zero);
+  font-family:var(--font-mono);
+  font-size:.6875rem;
+  font-weight:600;
+  color:var(--text-3);
+  padding-top:.15rem;
+  flex:none;
+}
+.arch-list b{color:var(--text);font-weight:600;}
+
+.shots-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--sp-4);}
+.shot{
+  border:1px solid var(--line);
+  border-radius:var(--r-md);
+  overflow:hidden;
+  background:var(--bg-soft);
+}
+.shot img{width:100%;height:auto;display:block;}
+.shot figcaption{
+  padding:.6rem .85rem;
+  border-top:1px solid var(--line);
+  font-family:var(--font-mono);
+  font-size:.625rem;
+  letter-spacing:.08em;
+  color:var(--text-3);
+}
+
+.project-result{
+  padding:var(--sp-5);
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-left:2px solid var(--brand);
+  border-radius:0 var(--r-md) var(--r-md) 0;
+}
+.project-result p{color:var(--text-2);}
+
+/* --- Fiche technique (sidebar) --- */
+.project-aside{
+  position:sticky;
+  top:calc(var(--header-h) + 1.5rem);
+  display:flex;
+  flex-direction:column;
+  gap:var(--sp-4);
+}
+.project-cta{
+  display:flex;flex-direction:column;gap:var(--sp-3);
+  padding:var(--sp-5);
+  background:linear-gradient(160deg,var(--surface-2),var(--surface));
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+}
+.project-cta h3{font-size:1.05rem;}
+.project-cta p{color:var(--text-2);font-size:var(--fs-sm);line-height:1.6;}
+
+/* --- Navigation entre projets --- */
+.project-nav{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:var(--sp-4);
+  padding-block:clamp(2rem,4vw,3rem);
+  border-top:1px solid var(--line);
+}
+.project-nav__item{
+  display:flex;flex-direction:column;gap:.35rem;
+  padding:var(--sp-5);
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  transition:border-color var(--t) var(--ease),background-color var(--t) var(--ease);
+}
+.project-nav__item:hover{border-color:var(--line-strong);background:var(--surface-2);}
+.project-nav__item--next{text-align:right;align-items:flex-end;}
+.project-nav__dir{
+  font-family:var(--font-mono);
+  font-size:.625rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.project-nav__name{font-size:1.0625rem;font-weight:700;letter-spacing:-.02em;}
+
+/* --- État : projet introuvable --- */
+.project-404{
+  display:flex;flex-direction:column;align-items:center;gap:var(--sp-4);
+  padding-block:clamp(5rem,12vw,9rem);
+  text-align:center;
+}
+.project-404 p{color:var(--text-2);max-width:46ch;}
+
+/* --- Responsive --- */
+@media (max-width:1024px){
+  .project-layout{grid-template-columns:1fr;}
+  .project-aside{position:static;}
+}
+@media (max-width:640px){
+  .feature-list{grid-template-columns:1fr;}
+  .shots-grid{grid-template-columns:1fr;}
+  .project-nav{grid-template-columns:1fr;}
+  .project-nav__item--next{text-align:left;align-items:flex-start;}
+}

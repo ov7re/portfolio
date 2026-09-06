@@ -140,7 +140,7 @@ function renderNotFound(root) {
   render(
     root,
     html`
-      <div class="container">
+      <div class="shell">
         <div class="project-404">
           <h1>${t('project.notFoundTitle', 'Projet introuvable')}</h1>
           <p>
@@ -171,7 +171,7 @@ function renderProject(root, project) {
   render(
     root,
     html`
-      <div class="container">
+      <div class="shell">
         <a class="project-back" href="index.html#projets">
           ${raw(icon('arrowLeft'))} ${t('common.backToProjects', 'Retour aux projets')}
         </a>
@@ -235,7 +235,7 @@ function renderProject(root, project) {
 }
 
 /** Charge la scène 3D. Toute erreur est absorbée : elle reste décorative. */
-async function startScene(project) {
+async function startScene() {
   const canvas = qs('[data-scene]');
   if (!canvas) return null;
 
@@ -247,9 +247,9 @@ async function startScene(project) {
       return null;
     }
     scene.show(1);
-    // La page projet montre la trame « architecture » : la même matière que
-    // la section projets de l'accueil, pour garder le fil visuel.
-    scene.morphTo(scene.indexOf(project ? 'projets' : 'accueil'));
+    // La page projet ouvre sur la structure déjà assemblée : le projet existe,
+    // il n'est plus en train de se construire.
+    scene.setProgress(0.34);
     return scene;
   } catch (error) {
     console.warn('[OV7] Scène 3D indisponible, la page continue sans :', error);
@@ -272,7 +272,7 @@ async function start() {
   mountFooter();
   mountEasterEgg();
 
-  const scene = await startScene(project);
+  const scene = await startScene();
 
   if (motion.initMotion()) {
     document.documentElement.classList.add('motion');

@@ -2,7 +2,7 @@
    OV7 Development — Page projet (projet.html)
    ========================================================================== */
 
-.project-page{padding-top:var(--header-h);}
+.project-page{padding-top:clamp(5rem,11vh,7.5rem);}
 
 /* --- Fil d'ariane / retour --- */
 .project-back{
@@ -149,7 +149,7 @@
 /* --- Fiche technique (sidebar) --- */
 .project-aside{
   position:sticky;
-  top:calc(var(--header-h) + 1.5rem);
+  top:clamp(5.5rem,12vh,8rem);
   display:flex;
   flex-direction:column;
   gap:var(--sp-4);

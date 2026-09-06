@@ -1,50 +1,36 @@
 /**
- * Section projets : filtres animés et grille de cartes.
- * Les cartes et les filtres sont entièrement dérivés de scripts/data/projects.js.
+ * Section projets : filtres et liste.
+ * Les lignes et les filtres sont entièrement dérivés de scripts/data/projects.js.
  */
 
 import { qs, qsa, html, raw, render } from '../lib/dom.js';
 import { icon } from '../lib/icons.js';
 import { projects, getUsedCategories } from '../data/projects.js';
-import { projectCover } from '../lib/cover.js';
 import { t } from '../i18n/index.js';
-import { observeReveals } from '../lib/reveal.js';
 
-const MAX_TAGS = 4;
-
-function projectCard(project) {
-  const visibleTags = project.tech.slice(0, MAX_TAGS);
-  const extra = project.tech.length - visibleTags.length;
+function projectRow(project, index) {
+  const number = String(index + 1).padStart(2, '0');
 
   return html`
     <article
-      class="project-card"
+      class="project-row"
       data-project-card
-      data-anim="card"
-      data-tilt
+      data-anim="fade"
       data-categories="${project.categories.join(' ')}"
     >
-      <div class="project-card__media">
-        ${raw(projectCover(project.motif))}
-        <span class="project-card__cat">${project.primaryLabel}</span>
-      </div>
-      <div class="project-card__body">
-        <h3 class="project-card__title">
-          <span>${project.name}</span>
-          <span class="project-card__status">${project.status}</span>
-        </h3>
-        <p class="project-card__text">${project.summary}</p>
-        <div class="project-card__foot">
-          <div class="tag-list">
-            ${raw(visibleTags.map((tech) => html`<span class="tag">${tech}</span>`).join(''))}
-            ${raw(extra > 0 ? html`<span class="tag">+${extra}</span>` : '')}
-          </div>
-          <a class="link-arrow project-card__link" href="projet.html?id=${project.id}">
-            <span class="visually-hidden">${project.name} — </span>${t('common.details', 'Détails')}
-            ${raw(icon('arrowRight'))}
-          </a>
-        </div>
-      </div>
+      <span class="project-row__num">${number}</span>
+      <h3 class="project-row__name">${project.name}</h3>
+      <span class="project-row__meta">
+        <span>${project.primaryLabel}</span>
+        <span>${project.status}</span>
+      </span>
+      <a
+        class="project-row__link project-row__go"
+        href="projet.html?id=${project.id}"
+        aria-label="${project.name} — ${t('common.viewProject', 'Voir le projet')}"
+      >
+        ${raw(icon('arrowRight'))}
+      </a>
     </article>
   `;
 }
@@ -62,12 +48,12 @@ function filterButton(category, isActive) {
   `;
 }
 
-function applyFilter(grid, emptyState, value) {
+function applyFilter(list, emptyState, value) {
   let visible = 0;
 
-  qsa('[data-project-card]', grid).forEach((card) => {
-    const matches = value === 'all' || card.dataset.categories.split(' ').includes(value);
-    card.classList.toggle('is-hidden', !matches);
+  qsa('[data-project-card]', list).forEach((row) => {
+    const matches = value === 'all' || row.dataset.categories.split(' ').includes(value);
+    row.classList.toggle('is-hidden', !matches);
     if (matches) visible += 1;
   });
 
@@ -76,16 +62,15 @@ function applyFilter(grid, emptyState, value) {
 
 export function mountProjects({
   filters = '[data-project-filters]',
-  grid = '[data-projects]',
+  list = '[data-projects]',
   empty = '[data-projects-empty]',
 } = {}) {
   const filtersEl = qs(filters);
-  const gridEl = qs(grid);
+  const listEl = qs(list);
   const emptyEl = qs(empty);
-  if (!gridEl) return;
+  if (!listEl) return;
 
-  render(gridEl, projects.map(projectCard).join(''));
-  qsa('a svg', gridEl).forEach((svg) => svg.classList.add('btn__icon', 'btn__icon--arrow'));
+  render(listEl, projects.map(projectRow).join(''));
 
   if (filtersEl) {
     const categories = getUsedCategories();
@@ -101,14 +86,12 @@ export function mountProjects({
       qsa('[data-filter]', filtersEl).forEach((item) =>
         item.setAttribute('aria-pressed', String(item === button))
       );
-      applyFilter(gridEl, emptyEl, button.dataset.filter);
+      applyFilter(listEl, emptyEl, button.dataset.filter);
 
-      // Relance l'animation d'entrée des cartes restées visibles
-      gridEl.classList.remove('is-refresh');
-      void gridEl.offsetWidth;
-      gridEl.classList.add('is-refresh');
-
-      observeReveals(gridEl);
+      // Relance l'animation d'entrée des lignes restées visibles
+      listEl.classList.remove('is-refresh');
+      void listEl.offsetWidth;
+      listEl.classList.add('is-refresh');
     });
   }
 

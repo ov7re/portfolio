@@ -1,5 +1,5 @@
 /**
- * Bandeau de statistiques.
+ * Relevé de données du hero.
  * Les valeurs viennent de scripts/data/content.js, où elles sont calculées
  * à partir des données réelles du site. Une valeur numérique est comptée à
  * l'écran ; une valeur textuelle est simplement affichée.
@@ -8,21 +8,25 @@
 import { html, raw, render } from '../lib/dom.js';
 import { stats } from '../data/content.js';
 
+/**
+ * La valeur réelle est écrite directement : si le compteur animé ne démarre
+ * pas (GSAP bloqué, mouvement réduit), le visiteur lit le bon chiffre.
+ */
 function statValue(value) {
   const numeric = Number(value);
   return Number.isFinite(numeric)
-    ? html`<span data-count="${numeric}">0</span>`
-    : html`${value}`;
+    ? html`<b data-count="${numeric}">${numeric}</b>`
+    : html`<b>${value}</b>`;
 }
 
 export function mountStats(selector = '[data-stats]') {
   const markup = stats
     .map(
-      (stat) => html`
-        <div class="stat" data-anim="fade">
-          <div class="stat__value">${raw(statValue(stat.value))}</div>
-          <div class="stat__label">${stat.label}</div>
-        </div>
+      (stat, index) => html`
+        <span class="readout__line">
+          ${raw(index === 0 ? '<span class="readout__dot" aria-hidden="true"></span>' : '')}
+          ${raw(statValue(stat.value))} ${stat.label}
+        </span>
       `
     )
     .join('');

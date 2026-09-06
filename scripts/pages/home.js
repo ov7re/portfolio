@@ -76,12 +76,9 @@ function startMotion(scene) {
   // Créés dans l'ordre de la page : ScrollTrigger recalcule dans cet ordre.
   motion.initHeaderMotion();
   motion.heroIntro();
-  motion.parallax();
   motion.countUpStats();
   motion.revealOnScroll();
-  motion.processTrack();
   motion.magneticButtons();
-  motion.tiltCards();
   motion.bindScene(scene);
 
   return true;
@@ -98,6 +95,11 @@ async function start() {
     document.documentElement.classList.remove('motion');
     observeReveals();
     scene?.show(1);
+  }
+
+  // Accès de réglage : http://…/index.html?debug puis __ov7.scene.setProgress(0.4, true)
+  if (new URLSearchParams(window.location.search).has('debug')) {
+    window.__ov7 = { scene, motion };
   }
 
   motion.pageTransitions();

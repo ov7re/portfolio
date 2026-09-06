@@ -25,7 +25,7 @@ Si l'une ou l'autre est bloquée, le site reste complet et lisible.
 ├── styles/
 │   ├── base.css            variables, reset, typographie, utilitaires
 │   ├── components.css      boutons, cartes, formulaire, filtres
-│   ├── sections.css        sections de l'accueil + responsive
+│   ├── sections.css        mise en page de l'accueil + responsive
 │   ├── project.css         page projet
 │   └── motion.css          scène 3D, voiles, états de départ des animations
 │
@@ -45,8 +45,8 @@ Si l'une ou l'autre est bloquée, le site reste complet et lisible.
 │   │   ├── theme.js        thème clair / sombre
 │   │   ├── reveal.js       apparitions — voie de secours sans GSAP
 │   │   ├── motion.js       couche de motion design (GSAP + ScrollTrigger)
-│   │   ├── scene3d.js      scène 3D persistante (Three.js)
-│   │   └── shapes.js       les formes prises par le nuage de points
+│   │   ├── scene3d.js      scène 3D cinématographique (Three.js)
+│   │   └── structure.js    géométrie de la structure en blocs
 │   ├── i18n/               internationalisation (français aujourd'hui)
 │   └── pages/              points d'entrée : home.js et project.js
 │
@@ -89,32 +89,39 @@ se recalculent seuls) et sur sa propre page `projet.html?id=<identifiant>`.
 
 ## Mouvement et 3D
 
-### La scène 3D
+### La scène
 
-Un nuage de ~7 000 points (2 600 sur mobile) occupe un canvas fixe derrière
-toute la page. Il ne disparaît jamais : il **change de forme à chaque section**,
-ce qui donne au site un fil visuel continu.
+Une **structure de blocs modulaires** occupe l'écran derrière toute la page :
+dispersés au chargement, ils s'assemblent en coupole au fil du défilement
+pendant que la caméra traverse le décor. Éclairage braise, sol en relief,
+brouillard, floraison et grain argentique — l'objectif est une image de film.
 
-L'enchaînement est décrit dans `scripts/lib/shapes.js` :
+Tout est procédural : **aucun modèle 3D ni texture à télécharger**.
 
-| Section        | Forme                                   |
-| -------------- | --------------------------------------- |
-| Accueil        | le « 7 » de la marque, en volume        |
-| Services       | deux amas — les deux pôles d'activité   |
-| Méthode        | une double hélice qui avance            |
-| Projets        | une trame régulière — l'architecture    |
-| Technologies   | une constellation sphérique             |
-| À propos       | un champ d'ondes au repos               |
-| Contact        | retour au « 7 »                         |
+| Fichier | Rôle |
+| --- | --- |
+| `scripts/lib/structure.js` | géométrie des blocs : position d'arrivée, position de départ, ordre de pose |
+| `scripts/lib/scene3d.js` | rendu, matériaux, lumières, caméra, post-traitement |
 
-Pour changer une forme, écrire un générateur qui renvoie un `Float32Array` de
-`count * 3` coordonnées et l'ajouter à `shapeSequence`. La section qui la
-déclenche est désignée par son attribut `data-shape` dans le HTML.
+**Réglages utiles** (`scene3d.js`) :
 
-Réglages utiles dans `scripts/lib/scene3d.js` : `DESKTOP_POINTS`,
-`MOBILE_POINTS`, `MORPH_DURATION`, et les uniformes `uSize` (taille des points
-en pixels) et `uOpacity`. La densité du voile de lisibilité se règle avec
-`.scene-scrim { opacity }` dans `motion.css`.
+| Constante | Effet |
+| --- | --- |
+| `ASSEMBLY_FLOOR` | avancement de l'assemblage au repos (0.68 = coupole déjà bâtie aux deux tiers au premier écran) |
+| `ASSEMBLY_END` | progression de lecture à laquelle la structure est complète |
+| `CAMERA_PATH` | trajectoire de la caméra, exprimée en progression de lecture |
+| `PALETTE` | couleurs de la scène (braise, blocs, sol, brouillard) |
+| `toneMappingExposure` | luminosité générale |
+
+La densité du voile de lisibilité se règle avec `.scene-scrim { opacity }`
+dans `motion.css`.
+
+**Mode réglage** : ouvrir `index.html?debug`, puis dans la console
+
+```js
+__ov7.scene.setProgress(0.42, true);  // se placer à un moment précis
+__ov7.scene.show(1, true);            // révéler la scène instantanément
+```
 
 ### Le motion design
 
@@ -128,15 +135,12 @@ Personnalité de mouvement **Premium**, définie en tête de `scripts/lib/motion
 
 Le balisage se fait par attributs, jamais par classe d'animation :
 
-| Attribut            | Effet                                                |
-| ------------------- | ---------------------------------------------------- |
-| `data-anim="fade"`  | translation courte + opacité                          |
-| `data-anim="card"`  | cascade de cartes (lot de 6, 50 ms d'écart)           |
-| `data-anim="mask"`  | le texte monte derrière un masque (titres)            |
-| `data-magnetic`     | bouton légèrement magnétique (souris uniquement)      |
-| `data-tilt`         | carte inclinée au survol                              |
-| `data-parallax`     | élément de fond plus lent que le contenu              |
-| `data-shape`        | forme 3D déclenchée par la section                    |
+| Attribut | Effet |
+| --- | --- |
+| `data-anim="fade"` | translation courte + opacité (titres, lignes, paragraphes) |
+| `data-anim="card"` | panneaux denses (formulaire, fiches) |
+| `data-magnetic` | bouton légèrement magnétique (souris uniquement) |
+| `data-count` | valeur chiffrée comptée à l'écran |
 
 ### Règle de sécurité
 
@@ -148,13 +152,14 @@ Un élément n'est masqué **que tant qu'un mécanisme actif s'engage à le rév
 - `html.reveal-js` — voie de secours, posée par `observeReveals()` lui-même.
 
 Sans JavaScript, avec un CDN bloqué ou un module en échec, aucune des deux
-classes n'est présente : **rien n'est caché**. Ce comportement est vérifiable en
-remplaçant l'URL de GSAP par une adresse injoignable dans `index.html`.
+classes n'est présente : **rien n'est caché**. Les valeurs chiffrées sont
+écrites en dur dans le HTML, pas seulement produites par l'animation.
 
-`prefers-reduced-motion` désactive toute la couche : pas de pin, pas de
-transformation progressive, pas de voile.
+Ce comportement se vérifie en remplaçant l'URL de GSAP par une adresse
+injoignable dans `index.html`.
 
----
+`prefers-reduced-motion` désactive toute la couche : caméra fixe, structure
+déjà assemblée, aucune transformation progressive.
 
 ## Formulaire de devis
 

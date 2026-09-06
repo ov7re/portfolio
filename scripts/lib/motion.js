@@ -41,16 +41,19 @@ function register() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Header : barre de progression et masquage au défilement            */
+/* Header : barre de progression et passage en mode compact           */
 /* ------------------------------------------------------------------ */
 
 export function initHeaderMotion() {
   if (!isAvailable()) return;
   register();
 
-  const header = qs('[data-header]');
-  const progress = qs('[data-scroll-progress]');
+  // Révélation du header. Elle vit ici et non dans heroIntro() : les pages
+  // projet n'ont pas de hero, et le header y resterait invisible.
+  gsap.to('.header .wordmark-link', { opacity: 1, duration: 0.8, delay: 0.1 });
+  gsap.to('.header__right', { opacity: 1, duration: 0.8, delay: 0.3 });
 
+  const progress = qs('[data-scroll-progress]');
   if (progress) {
     gsap.to(progress, {
       scaleX: 1,
@@ -59,22 +62,15 @@ export function initHeaderMotion() {
     });
   }
 
+  const header = qs('[data-header]');
   if (!header) return;
 
-  // Le header s'efface en descendant, revient dès qu'on remonte :
-  // la navigation reste à portée sans manger l'écran.
+  // Le header reste visible en permanence — c'est le seul repère de
+  // navigation — mais il se compacte dès qu'on quitte le premier écran.
   ScrollTrigger.create({
-    start: 'top -120',
+    start: 'top -70',
     end: 'max',
-    onUpdate(self) {
-      const hide = self.direction === 1 && self.scroll() > 260;
-      gsap.to(header, {
-        yPercent: hide ? -110 : 0,
-        duration: MOTION.base,
-        ease: hide ? MOTION.easeIn : MOTION.ease,
-        overwrite: true,
-      });
-    },
+    onToggle: (self) => header.classList.toggle('is-stuck', self.isActive),
   });
 }
 
@@ -83,30 +79,22 @@ export function initHeaderMotion() {
 /* ------------------------------------------------------------------ */
 
 /**
- * Séquence d'entrée. Un seul héros — le titre — puis les éléments
- * secondaires, puis le fond. Budget total sous 1,6 s.
+ * Séquence d'entrée. Le repère de marque, puis la phrase, puis les données.
+ * Budget total sous 1,8 s — la scène 3D, elle, est déjà là.
  */
 export function heroIntro() {
   if (!isAvailable()) return null;
   register();
 
   // Uniquement des `.to()` : les états de départ viennent de motion.css.
-  const timeline = gsap.timeline({ defaults: { ease: MOTION.ease } });
-
-  timeline
-    .to('[data-hero-label]', { y: 0, opacity: 1, duration: 0.6 }, 0.1)
+  return gsap
+    .timeline({ defaults: { ease: MOTION.ease } })
     .to(
-      '.hero__title .line__inner',
-      { y: 0, duration: 1, stagger: 0.09, ease: 'power3.out' },
-      0.18
+      '.hero__statement .line__inner',
+      { y: 0, duration: 1.15, stagger: 0.1, ease: 'power3.out' },
+      0.35
     )
-    .to('[data-hero-lead]', { y: 0, opacity: 1, duration: 0.7 }, 0.62)
-    .to('[data-hero-actions] > *', { y: 0, opacity: 1, duration: 0.6, stagger: 0.08 }, 0.76)
-    .to('[data-hero-meta] span', { y: 0, opacity: 1, duration: 0.5, stagger: 0.06 }, 0.9)
-    .to('[data-hero-visual]', { y: 0, opacity: 1, duration: 1.1, ease: 'power3.out' }, 0.42)
-    .to('[data-hero-visual] .code-line', { opacity: 1, duration: 0.4, stagger: 0.035 }, 0.72);
-
-  return timeline;
+    .to('[data-hero-hud]', { opacity: 1, y: 0, duration: 0.8 }, 0.85);
 }
 
 /**
@@ -132,53 +120,39 @@ export function projectIntro() {
 
 /**
  * Apparition des blocs. `data-anim` choisit le registre :
- *   fade   — translation courte + opacité (par défaut)
- *   mask   — le texte monte derrière un masque (titres)
- *   scale  — léger rapprochement (visuels)
+ *   fade  — translation courte + opacité (titres, lignes, paragraphes)
+ *   card  — panneaux denses (formulaire, fiches)
  */
-export function revealOnScroll(scope = document) {
+export function revealOnScroll() {
   if (!isAvailable()) return;
   register();
 
-  // Titres : montée derrière un masque
-  qsa('[data-anim="mask"]', scope).forEach((el) => {
-    gsap.from(el, {
-      yPercent: 100,
-      duration: MOTION.slow,
-      ease: 'power3.out',
-      scrollTrigger: { trigger: el.closest('[data-anim-trigger]') || el, start: 'top 88%' },
-    });
-  });
-
-  // Blocs simples
   ScrollTrigger.batch('[data-anim="fade"]', {
-    start: 'top 88%',
+    start: 'top 90%',
     once: true,
-    interval: 0.08,
+    interval: 0.07,
     batchMax: 6,
     onEnter: (batch) =>
       gsap.to(batch, {
         y: 0,
         opacity: 1,
-        duration: 0.7,
+        duration: 0.75,
         stagger: MOTION.stagger,
         overwrite: true,
       }),
   });
 
-  // Cartes : cascade courte, jamais plus de 500 ms au total
   ScrollTrigger.batch('[data-anim="card"]', {
-    start: 'top 90%',
+    start: 'top 92%',
     once: true,
     interval: 0.06,
-    batchMax: 6,
+    batchMax: 4,
     onEnter: (batch) =>
       gsap.to(batch, {
         y: 0,
         opacity: 1,
-        scale: 1,
-        duration: 0.65,
-        stagger: 0.05,
+        duration: 0.7,
+        stagger: 0.06,
         ease: 'power3.out',
         overwrite: true,
       }),
@@ -189,81 +163,27 @@ export function revealOnScroll(scope = document) {
 /* Compteurs                                                          */
 /* ------------------------------------------------------------------ */
 
-/** Les statistiques chiffrées comptent en entrant à l'écran. */
+/** Les valeurs chiffrées du relevé comptent à l'ouverture. */
 export function countUpStats() {
   if (!isAvailable()) return;
   register();
 
-  qsa('[data-count]').forEach((el) => {
+  qsa('[data-count]').forEach((el, index) => {
     const target = Number(el.dataset.count);
     if (!Number.isFinite(target)) return;
     const counter = { value: 0 };
+    el.textContent = '0';
 
     gsap.to(counter, {
       value: target,
-      duration: 1.2,
+      duration: 1.4,
+      delay: 1 + index * 0.08,
       ease: 'power2.out',
       snap: { value: 1 },
       onUpdate: () => {
         el.textContent = String(Math.round(counter.value));
       },
-      scrollTrigger: { trigger: el, start: 'top 92%', once: true },
     });
-  });
-}
-
-/* ------------------------------------------------------------------ */
-/* Méthode : progression horizontale pilotée par le défilement        */
-/* ------------------------------------------------------------------ */
-
-/**
- * Sur grand écran, la section méthode se fige et les six étapes défilent
- * horizontalement. Sur mobile, elles restent empilées : pas de pin, pas de
- * défilement détourné sur un écran étroit.
- */
-export function processTrack() {
-  if (!isAvailable()) return;
-  register();
-
-  const section = qs('[data-process-section]');
-  const track = qs('[data-process-track]');
-  if (!section || !track) return;
-
-  gsap.matchMedia().add('(min-width: 901px)', () => {
-    const distance = () => Math.max(0, track.scrollWidth - window.innerWidth + 120);
-
-    const tween = gsap.to(track, {
-      x: () => -distance(),
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: () => `+=${distance() + window.innerHeight * 0.6}`,
-        pin: true,
-        scrub: 0.6,
-        invalidateOnRefresh: true,
-        anticipatePin: 1,
-      },
-    });
-
-    // Chaque étape s'éclaire quand elle passe au centre
-    qsa('[data-step]', track).forEach((step) => {
-      gsap.to(step, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.5,
-        scrollTrigger: {
-          trigger: step,
-          containerAnimation: tween,
-          start: 'left 78%',
-          toggleActions: 'play none none reverse',
-        },
-      });
-    });
-
-    return () => {
-      gsap.set(track, { x: 0 });
-    };
   });
 }
 
@@ -294,90 +214,30 @@ export function magneticButtons(scope = document) {
   });
 }
 
-/** Inclinaison des cartes projet au survol : de la profondeur, pas un jouet. */
-export function tiltCards(scope = document) {
-  if (!isAvailable() || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-  register();
-
-  qsa('[data-tilt]', scope).forEach((card) => {
-    const media = qs('.project-card__media', card);
-    const rotateX = gsap.quickTo(card, 'rotateX', { duration: 0.5, ease: MOTION.ease });
-    const rotateY = gsap.quickTo(card, 'rotateY', { duration: 0.5, ease: MOTION.ease });
-    const shiftY = media ? gsap.quickTo(media, 'yPercent', { duration: 0.6, ease: MOTION.ease }) : null;
-
-    card.addEventListener('pointermove', (event) => {
-      const rect = card.getBoundingClientRect();
-      const px = (event.clientX - rect.left) / rect.width - 0.5;
-      const py = (event.clientY - rect.top) / rect.height - 0.5;
-      rotateX(-py * 5);
-      rotateY(px * 6);
-      if (shiftY) shiftY(-py * 3);
-    });
-
-    card.addEventListener('pointerleave', () => {
-      rotateX(0);
-      rotateY(0);
-      if (shiftY) shiftY(0);
-    });
-  });
-}
-
-/** Léger parallaxe : le fond avance moins vite que le contenu. */
-export function parallax(scope = document) {
-  if (!isAvailable()) return;
-  register();
-
-  qsa('[data-parallax]', scope).forEach((el) => {
-    const amount = Number(el.dataset.parallax) || 60;
-    gsap.fromTo(
-      el,
-      { y: -amount / 2 },
-      {
-        y: amount / 2,
-        ease: 'none',
-        scrollTrigger: { trigger: el.parentElement || el, start: 'top bottom', end: 'bottom top', scrub: true },
-      }
-    );
-  });
-}
-
 /* ------------------------------------------------------------------ */
 /* Liaison avec la scène 3D                                           */
 /* ------------------------------------------------------------------ */
 
 /**
- * Fait correspondre chaque section à une forme du nuage de points, et
- * transmet la vitesse de défilement à la scène : plus on va vite, plus la
- * matière s'agite.
+ * Une seule source de vérité : la progression de lecture de la page pilote
+ * à la fois la caméra et l'assemblage de la structure.
  */
 export function bindScene(scene) {
   if (!scene) return;
+  scene.show(1);
 
   if (!isAvailable()) {
-    scene.show(1);
+    scene.setProgress(0);
     return;
   }
   register();
-
-  qsa('[data-shape]').forEach((section) => {
-    const index = scene.indexOf(section.dataset.shape);
-    if (index < 0) return;
-
-    ScrollTrigger.create({
-      trigger: section,
-      start: 'top 60%',
-      end: 'bottom 40%',
-      onEnter: () => scene.morphTo(index),
-      onEnterBack: () => scene.morphTo(index),
-    });
-  });
 
   ScrollTrigger.create({
     start: 0,
     end: 'max',
     onUpdate(self) {
+      scene.setProgress(self.progress);
       scene.setEnergy(Math.min(Math.abs(self.getVelocity()) / 2600, 1));
-      scene.setSpin(self.progress * Math.PI * 1.4);
     },
   });
 }

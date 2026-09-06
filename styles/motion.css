@@ -1,6 +1,6 @@
 /* ==========================================================================
    OV7 Development — Couche mouvement
-   Scène 3D, voiles de transition, états de départ des animations.
+   Scène 3D, voile de lisibilité, voile de sortie, états de départ.
 
    Règle de sécurité : un élément n'est masqué que tant qu'un mécanisme actif
    s'engage à le révéler (`html.motion` pour GSAP, `html.reveal-js` pour le
@@ -18,31 +18,29 @@
   height:100%;
 }
 
-/* Voile de lisibilité : la 3D ne doit jamais gêner la lecture du texte. */
+/**
+ * Voile de lisibilité.
+ * La scène doit rester visible d'un bout à l'autre, mais le texte doit rester
+ * lisible par-dessus : un voile renforcé sur les bords — où vivent les
+ * colonnes de texte — laisse le centre de l'image respirer.
+ */
 .scene-scrim{
   position:fixed;
   inset:0;
   z-index:0;
   pointer-events:none;
-  /* Un voile plat pour garantir le contraste du texte, plus une vignette qui
-     concentre la matière au centre. Assez léger pour laisser voir la 3D. */
   background:
-    radial-gradient(ellipse 78% 62% at 50% 45%, transparent 0%, var(--bg) 92%),
-    var(--bg);
-  opacity:.56;
+    linear-gradient(90deg, var(--bg) 0%, var(--bg) 32%, transparent 66%, transparent 84%, var(--bg) 100%),
+    radial-gradient(ellipse 78% 62% at 64% 48%, transparent 0%, var(--bg) 96%);
+  opacity:.74;
 }
-:root[data-theme="light"] .scene-scrim{opacity:.72;}
+:root[data-theme="light"] .scene-scrim{opacity:.8;}
 
 /* Le contenu passe devant la scène.
    Attention : ne jamais toucher au `position` du header ni du menu mobile —
    ils sont fixes, et les repasser en `relative` les remettrait dans le flux. */
 main,
 .footer{position:relative;z-index:1;}
-
-/* Les sections posées sur une surface pleine masquent la 3D : on la laisse
-   respirer uniquement là où elle apporte quelque chose. */
-.stats,
-.reviews{position:relative;z-index:1;background:color-mix(in srgb,var(--bg-soft) 92%,transparent);}
 
 /* ========================= Barre de progression ========================= */
 .scroll-progress{
@@ -56,9 +54,9 @@ main,
   pointer-events:none;
 }
 
-/* ========================= Voile de transition ========================= */
-/* Hors écran par défaut : le voile ne sert qu'à quitter la page. Il ne peut
-   donc jamais rester bloqué devant le contenu si une animation échoue. */
+/* ========================= Voile de sortie ========================= */
+/* Hors écran par défaut : il ne sert qu'à quitter la page, et ne peut donc
+   jamais rester bloqué devant le contenu si une animation échoue. */
 .curtain{
   position:fixed;
   inset:0;
@@ -81,21 +79,13 @@ main,
 .line{
   display:block;
   overflow:hidden;
-  padding-bottom:.06em;
+  padding-bottom:.08em;
 }
 .line__inner{display:block;}
 
-/* ========================= États de départ =========================
-   Règle : un élément n'est masqué que tant qu'un mécanisme actif s'engage à
-   le révéler. Chaque voie pose elle-même sa classe sur <html> :
-   · html.motion     → GSAP anime (classe posée avant le rendu, retirée par
-                       le filet du <head> si la couche ne confirme pas)
-   · html.reveal-js  → repli maison (classe posée par observeReveals())
-   Si aucune des deux n'est présente — pas de JavaScript, CDN bloqué, module
-   en échec — rien n'est caché. */
-html.motion [data-anim="fade"]{opacity:0;transform:translateY(26px);}
-html.motion [data-anim="card"]{opacity:0;transform:translateY(30px) scale(.985);}
-html.motion [data-anim="mask"]{will-change:transform;}
+/* ========================= États de départ ========================= */
+html.motion [data-anim="fade"]{opacity:0;transform:translateY(24px);}
+html.motion [data-anim="card"]{opacity:0;transform:translateY(28px);}
 
 html.reveal-js [data-anim]{
   opacity:0;
@@ -107,71 +97,59 @@ html.reveal-js [data-anim].is-visible{opacity:1;transform:none;}
 
 /* --- Hero : états de départ de la séquence d'ouverture ---
    Ils vivent en CSS et non dans un `gsap.from()` : si la timeline ne
-   démarrait pas, le hero resterait vide. Ici, retirer `html.motion` suffit
-   à tout rendre visible — c'est exactement ce que fait le filet du <head>. */
-html.motion [data-hero-label],
-html.motion [data-hero-lead],
-html.motion [data-hero-visual]{opacity:0;}
-html.motion [data-hero-label]{transform:translateY(14px);}
-html.motion [data-hero-lead]{transform:translateY(26px);}
-html.motion [data-hero-visual]{transform:translateY(40px);}
-html.motion [data-hero-actions] > *,
-html.motion [data-hero-meta] span{opacity:0;transform:translateY(16px);}
-html.motion .hero__title .line__inner{transform:translateY(108%);}
-html.motion [data-hero-visual] .code-line{opacity:0;}
-
-/* ========================= Méthode : piste horizontale ========================= */
-.process-viewport{
-  position:relative;
-  overflow:hidden;
-  padding-block:var(--sp-5);
-}
-.process-track{
-  display:flex;
-  gap:var(--sp-4);
-  padding-inline:var(--gutter);
-  width:max-content;
-  will-change:transform;
-}
-.process-track .step{
-  flex:0 0 clamp(260px,26vw,340px);
-  border:1px solid var(--line);
-  border-radius:var(--r-lg);
-  background:var(--surface);
-  min-height:210px;
-}
-.process-track .step::after{border-radius:var(--r-lg) 0 0 var(--r-lg);}
-
-/* Sur grand écran, la section se fige pendant la traversée des étapes. */
-@media (min-width:901px){
-  .process{min-height:100vh;display:flex;flex-direction:column;justify-content:center;}
-  html.motion .process-track .step{opacity:.35;transform:scale(.97);}
-}
-
-/* En dessous, les étapes s'empilent : aucun défilement détourné. */
-@media (max-width:900px){
-  .process-track{
-    flex-direction:column;
-    width:auto;
-    padding-inline:0;
-    transform:none!important;
-  }
-  .process-track .step{flex:1 1 auto;min-height:0;}
-  .process-viewport{overflow:visible;}
-}
-
-/* ========================= Profondeur des cartes projet ========================= */
-.projects-grid{perspective:1200px;}
-.project-card{transform-style:preserve-3d;}
-.project-card__media{overflow:hidden;}
+   démarrait pas, le hero resterait vide. Retirer `html.motion` suffit à tout
+   rendre visible — c'est exactement ce que fait le filet du <head>. */
+html.motion .hero__statement .line__inner{transform:translateY(110%);}
+html.motion [data-hero-hud]{opacity:0;transform:translateY(18px);}
+html.motion .header .wordmark-link,
+html.motion .header__right{opacity:0;}
 
 /* ========================= Mouvement réduit ========================= */
 @media (prefers-reduced-motion:reduce){
-  html.motion [data-anim="fade"],
-  html.motion [data-anim="card"]{opacity:1;transform:none;}
+  html.motion [data-anim]{opacity:1;transform:none;}
+  html.motion .hero__statement .line__inner{transform:none;}
+  html.motion [data-hero-hud]{opacity:1;transform:none;}
+  html.motion .header .wordmark-link,
+  html.motion .header__right{opacity:1;}
   .curtain{display:none;}
   .scroll-progress{display:none;}
-  .process-track{transform:none!important;flex-direction:column;width:auto;}
-  html.motion .process-track .step{opacity:1;transform:none;}
-  .process-viewport{overflow:visible;}
+  .scroll-cue__rail::after{animation:none;}
+}
+
+/* ========================= Lisibilité par-dessus la scène =========================
+   La caméra traverse le décor : selon la section, du texte peut se retrouver
+   au-dessus de blocs éclairés. Un halo sombre très diffus décolle le texte du
+   fond sans se lire comme une ombre portée. */
+.manifesto,
+.band__lead,
+.about__text,
+.offer__text,
+.step__text,
+.pole__desc,
+.band__title,
+.hero__statement,
+.project-row__name{
+  text-shadow:0 1px 28px var(--bg), 0 1px 8px var(--bg);
+}
+:root[data-theme="light"] .manifesto,
+:root[data-theme="light"] .band__lead,
+:root[data-theme="light"] .about__text,
+:root[data-theme="light"] .offer__text,
+:root[data-theme="light"] .step__text,
+:root[data-theme="light"] .pole__desc,
+:root[data-theme="light"] .band__title,
+:root[data-theme="light"] .hero__statement,
+:root[data-theme="light"] .project-row__name{
+  text-shadow:0 1px 22px var(--bg);
+}
+
+/* Sur écran étroit, le texte occupe toute la largeur : le voile latéral
+   n'a plus de sens, on passe à un voile uniforme un peu plus dense. */
+@media (max-width:860px){
+  .scene-scrim{
+    background:
+      linear-gradient(180deg, var(--bg) 0%, transparent 22%, transparent 72%, var(--bg) 100%),
+      var(--bg);
+    opacity:.6;
+  }
 }

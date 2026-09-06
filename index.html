@@ -73,7 +73,8 @@
 <script type="importmap">
 {
   "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
   }
 }
 </script>
@@ -103,7 +104,7 @@
 <body>
 <a class="skip-link" href="#contenu">Aller au contenu</a>
 
-<!-- Voile de transition entre les pages -->
+<!-- Voile de sortie vers une autre page -->
 <div class="curtain" data-curtain aria-hidden="true">
   <span class="curtain__mark">OV7</span>
 </div>
@@ -111,37 +112,31 @@
 <!-- Progression de lecture -->
 <div class="scroll-progress" data-scroll-progress aria-hidden="true"></div>
 
-<!-- Scène 3D persistante : elle traverse toutes les sections -->
+<!-- Scène 3D : elle occupe l'écran pendant toute la lecture -->
 <canvas class="scene" data-scene aria-hidden="true"></canvas>
 <div class="scene-scrim" aria-hidden="true"></div>
 
 <!-- ======================= HEADER ======================= -->
 <header class="header" data-header>
-  <div class="container header__inner">
-    <a class="brand" href="#accueil" aria-label="OV7 Development, retour en haut de page">
-      <span class="brand__mark" aria-hidden="true">OV7</span>
-      <span class="brand__text">
-        <span class="brand__name">OV7</span>
-        <span class="brand__suffix">Development</span>
-      </span>
+  <div class="shell hud">
+    <a class="wordmark-link" href="#top" aria-label="OV7 Development, retour en haut de page">
+      <span class="wordmark">OV7</span>
+      <span class="wordmark__sub">Development</span>
     </a>
 
-    <nav class="nav" aria-label="Navigation principale">
-      <a class="nav__link" href="#accueil" data-nav-link data-i18n="nav.home">Accueil</a>
-      <a class="nav__link" href="#services" data-nav-link data-i18n="nav.services">Services</a>
-      <a class="nav__link" href="#projets" data-nav-link data-i18n="nav.projects">Projets</a>
-      <a class="nav__link" href="#technologies" data-nav-link data-i18n="nav.technologies">Technologies</a>
-      <a class="nav__link" href="#a-propos" data-nav-link data-i18n="nav.about">À propos</a>
-      <a class="nav__link" href="#contact" data-nav-link data-i18n="nav.contact">Contact</a>
-    </nav>
+    <div class="header__right">
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="nav__link" href="#services" data-nav-link data-i18n="nav.services">Services</a>
+        <a class="nav__link" href="#projets" data-nav-link data-i18n="nav.projects">Projets</a>
+        <a class="nav__link" href="#technologies" data-nav-link data-i18n="nav.technologies">Stack</a>
+        <a class="nav__link" href="#a-propos" data-nav-link data-i18n="nav.about">Studio</a>
+        <a class="nav__link" href="#contact" data-nav-link data-i18n="nav.contact">Contact</a>
+      </nav>
 
-    <div class="header__actions">
       <button type="button" class="icon-btn theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Activer le thème clair" title="Thème clair">
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"/></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.2A8.5 8.5 0 0 1 9.8 4 8.5 8.5 0 1 0 20 14.2Z"/></svg>
       </button>
-
-      <a class="btn btn--primary btn--sm" href="#contact" data-magnetic="0.2" data-i18n="nav.quote">Demander un devis</a>
 
       <button type="button" class="icon-btn burger" data-burger aria-expanded="false" aria-controls="menu-mobile" aria-label="Ouvrir le menu">
         <span class="burger__lines" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -155,207 +150,144 @@
 <main id="contenu">
 
   <!-- ======================= HERO ======================= -->
-  <section class="hero" id="accueil" data-shape="accueil">
-    <div class="hero__bg" aria-hidden="true">
-      <span class="grid-lines" data-parallax="50"></span>
-      <span class="hero__glow"></span>
-    </div>
+  <section class="hero" id="top">
+    <div class="shell hero__inner">
+      <div class="hero__spacer" aria-hidden="true"></div>
 
-    <div class="container hero__inner">
-      <div class="hero__content">
-        <p class="hero__label mono" data-hero-label>
-          <span class="hero__pulse" aria-hidden="true"></span>
-          <b>OV7 Development</b><span class="sep">/</span>Full Stack Developer
-        </p>
+      <h1 class="hero__statement">
+        <span class="line"><span class="line__inner">Des idées.</span></span>
+        <span class="line"><span class="line__inner">Du code.</span></span>
+        <span class="line"><span class="line__inner"><em>Des solutions.</em></span></span>
+      </h1>
 
-        <h1 class="hero__title">
-          <span class="line"><span class="line__inner">Des idées. Du code.</span></span>
-          <span class="line"><span class="line__inner accent-word">Des solutions.</span></span>
-        </h1>
+      <div class="hud hud--bottom" data-hero-hud>
+        <div class="readout" data-stats></div>
 
-        <p class="hero__lead" data-hero-lead>
-          Je conçois des applications, sites web, logiciels et systèmes sur mesure
-          pour transformer vos idées en produits numériques fonctionnels.
-        </p>
-
-        <div class="hero__actions" data-hero-actions>
-          <a class="btn btn--primary" href="#projets" data-magnetic="0.25">
-            Voir mes projets
-            <svg class="btn__icon btn__icon--arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></svg>
-          </a>
-          <a class="btn btn--ghost" href="#contact" data-magnetic="0.25">Demander un devis</a>
-        </div>
-
-        <p class="hero__meta" data-hero-meta>
-          <span>Web</span><span>Software</span><span>Gaming</span>
-        </p>
-      </div>
-
-      <div class="code-window" data-hero-visual aria-hidden="true">
-        <div class="code-window__bar">
-          <span class="code-window__dots"><i></i><i></i><i></i></span>
-          <span class="code-window__file">ov7.config.js</span>
-          <span class="code-window__status">System_online</span>
-        </div>
-        <div class="code-window__body">
-<div class="code-line"><span class="code-line__n">1</span><span><span class="tok-key">const</span> <span class="tok-var">ov7</span> <span class="tok-punc">=</span> <span class="tok-punc">{</span></span></div>
-<div class="code-line"><span class="code-line__n">2</span><span>  <span class="tok-fn">studio</span><span class="tok-punc">:</span> <span class="tok-str">"OV7 Development"</span><span class="tok-punc">,</span></span></div>
-<div class="code-line"><span class="code-line__n">3</span><span>  <span class="tok-fn">stack</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"React"</span><span class="tok-punc">,</span> <span class="tok-str">"Node.js"</span><span class="tok-punc">,</span> <span class="tok-str">"Lua"</span><span class="tok-punc">],</span></span></div>
-<div class="code-line"><span class="code-line__n">4</span><span>  <span class="tok-fn">domaines</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"web"</span><span class="tok-punc">,</span> <span class="tok-str">"software"</span><span class="tok-punc">,</span> <span class="tok-str">"gaming"</span><span class="tok-punc">],</span></span></div>
-<div class="code-line"><span class="code-line__n">5</span><span></span></div>
-<div class="code-line"><span class="code-line__n">6</span><span>  <span class="tok-fn">build</span><span class="tok-punc">(</span><span class="tok-var">idee</span><span class="tok-punc">) {</span></span></div>
-<div class="code-line"><span class="code-line__n">7</span><span>    <span class="tok-com">// analyse -&gt; architecture -&gt; code</span></span></div>
-<div class="code-line"><span class="code-line__n">8</span><span>    <span class="tok-key">return</span> <span class="tok-fn">livrer</span><span class="tok-punc">(</span><span class="tok-fn">construire</span><span class="tok-punc">(</span><span class="tok-var">idee</span><span class="tok-punc">));</span></span></div>
-<div class="code-line"><span class="code-line__n">9</span><span>  <span class="tok-punc">}</span></span></div>
-<div class="code-line"><span class="code-line__n">10</span><span><span class="tok-punc">};</span></span></div>
-        </div>
-        <div class="code-window__foot">
-          <span>ov7 build --target production</span><span class="code-caret"></span>
-        </div>
+        <a class="scroll-cue" href="#manifeste">
+          <span class="scroll-cue__rail" aria-hidden="true"></span>
+          <span>Défiler</span>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- ======================= STATISTIQUES ======================= -->
-  <section class="stats" aria-label="Chiffres clés">
-    <div class="container">
-      <div class="stats__grid" data-stats data-stagger="60"></div>
+  <!-- ======================= MANIFESTE ======================= -->
+  <section class="band" id="manifeste">
+    <div class="shell">
+      <span class="band__index" data-anim="fade"><b>01</b> — Manifeste</span>
+      <p class="manifesto" data-anim="fade">
+        Je conçois des applications, sites web, logiciels et systèmes sur mesure.
+        <span>De l’architecture au déploiement, un seul interlocuteur.</span>
+      </p>
     </div>
   </section>
 
   <!-- ======================= SERVICES ======================= -->
-  <section class="section" id="services" data-shape="services">
-    <div class="container">
-      <div class="section-head" data-anim-trigger>
-        <span class="eyebrow mono" data-anim="fade" data-i18n="services.eyebrow">Services</span>
-        <h2><span class="line"><span class="line__inner" data-anim="mask" data-i18n="services.title">Ce que je développe</span></span></h2>
-        <p class="section-lead" data-anim="fade" data-i18n="services.lead">
-          Deux pôles, une même méthode&#160;: comprendre le besoin, définir l’architecture,
-          puis construire un produit qui reste maintenable une fois livré.
-        </p>
-      </div>
-      <div data-services></div>
+  <section class="band" id="services">
+    <div class="shell">
+      <span class="band__index" data-anim="fade"><b>02</b> — Services</span>
+      <h2 class="band__title" data-anim="fade" data-i18n="services.title">Ce que je développe</h2>
+      <p class="band__lead" data-anim="fade" data-i18n="services.lead">
+        Deux pôles, une même méthode&#160;: comprendre le besoin, définir l’architecture,
+        puis construire un produit qui reste maintenable une fois livré.
+      </p>
+
+      <div class="poles" data-services></div>
     </div>
   </section>
 
-  <!-- ======================= MÉTHODOLOGIE ======================= -->
-  <section class="section section--tight process" id="methode" data-shape="methode" data-process-section>
-    <div class="container">
-      <div class="section-head" data-anim-trigger>
-        <span class="eyebrow mono" data-anim="fade" data-i18n="process.eyebrow">Méthode</span>
-        <h2><span class="line"><span class="line__inner" data-anim="mask" data-i18n="process.title">De l’idée au produit</span></span></h2>
-        <p class="section-lead" data-anim="fade" data-i18n="process.lead">
-          Un projet réussi se joue autant avant qu’après le développement.
-          Voici les six étapes appliquées à chaque projet.
-        </p>
-      </div>
-    </div>
+  <!-- ======================= MÉTHODE ======================= -->
+  <section class="band" id="methode">
+    <div class="shell">
+      <span class="band__index" data-anim="fade"><b>03</b> — Méthode</span>
+      <h2 class="band__title" data-anim="fade" data-i18n="process.title">De l’idée au produit</h2>
+      <p class="band__lead" data-anim="fade" data-i18n="process.lead">
+        Un projet réussi se joue autant avant qu’après le développement.
+        Voici les six étapes appliquées à chaque projet.
+      </p>
 
-    <div class="process-viewport">
-      <div class="process-track" data-process-track></div>
+      <div class="steps" data-process></div>
     </div>
   </section>
 
   <!-- ======================= PROJETS ======================= -->
-  <section class="section" id="projets" data-shape="projets">
-    <div class="container">
-      <div class="section-head section-head--split" data-anim-trigger>
-        <div class="section-head__text">
-          <span class="eyebrow mono" data-anim="fade" data-i18n="projects.eyebrow">Projets</span>
-          <h2><span class="line"><span class="line__inner" data-anim="mask" data-i18n="projects.title">Projets sélectionnés</span></span></h2>
-          <p class="section-lead" data-anim="fade" data-i18n="projects.lead">
-            Des projets réels, présentés selon leur état réel&#160;: outils personnels,
-            expérimentations techniques et bases de développement.
-          </p>
-        </div>
-      </div>
+  <section class="band" id="projets">
+    <div class="shell">
+      <span class="band__index" data-anim="fade"><b>04</b> — Projets</span>
+      <h2 class="band__title" data-anim="fade" data-i18n="projects.title">Projets sélectionnés</h2>
+      <p class="band__lead" data-anim="fade" data-i18n="projects.lead">
+        Des projets réels, présentés selon leur état réel&#160;: outils personnels,
+        expérimentations techniques et bases de développement.
+      </p>
 
       <div class="filters" role="group" aria-label="Filtrer les projets par catégorie" data-project-filters></div>
-      <div class="projects-grid" data-projects data-stagger="70"></div>
+      <div class="projects" data-projects></div>
       <p class="projects-empty" data-projects-empty hidden>Aucun projet ne correspond à ce filtre.</p>
     </div>
   </section>
 
   <!-- ======================= TECHNOLOGIES ======================= -->
-  <section class="section" id="technologies" data-shape="technologies">
-    <div class="container">
-      <div class="section-head" data-anim-trigger>
-        <span class="eyebrow mono" data-anim="fade" data-i18n="tech.eyebrow">Stack</span>
-        <h2><span class="line"><span class="line__inner" data-anim="mask" data-i18n="tech.title">Technologies</span></span></h2>
-        <p class="section-lead" data-anim="fade" data-i18n="tech.lead">
-          Les langages, frameworks et bases de données utilisés au quotidien,
-          côté web, logiciel et gaming.
-        </p>
-      </div>
-      <div data-technologies></div>
+  <section class="band" id="technologies">
+    <div class="shell">
+      <span class="band__index" data-anim="fade"><b>05</b> — Stack</span>
+      <h2 class="band__title" data-anim="fade" data-i18n="tech.title">Technologies</h2>
+      <p class="band__lead" data-anim="fade" data-i18n="tech.lead">
+        Les langages, frameworks et bases de données utilisés au quotidien,
+        côté web, logiciel et gaming.
+      </p>
+
+      <div class="tech-groups" data-technologies></div>
     </div>
   </section>
 
-  <!-- ======================= À PROPOS ======================= -->
-  <section class="section" id="a-propos" data-shape="a-propos">
-    <div class="container about">
-      <div class="about__body">
-        <div class="section-head section-head--flush" data-anim-trigger>
-          <span class="eyebrow mono" data-anim="fade" data-i18n="about.eyebrow">À propos</span>
-          <h2><span class="line"><span class="line__inner" data-anim="mask" data-i18n="about.title">À propos d’OV7</span></span></h2>
-        </div>
-        <p class="about__text" data-anim="fade" data-i18n="about.p1">
-          OV7 Development est un studio de développement indépendant spécialisé dans la
-          conception de solutions numériques sur mesure.
-        </p>
-        <p class="about__text" data-anim="fade" data-i18n="about.p2">
-          L’objectif est de transformer des besoins concrets en produits fonctionnels,
-          performants et maintenables, avec une approche allant de l’architecture au
-          développement et à la mise en production.
-        </p>
-        <div class="about__pills" data-about-pills data-stagger="50"></div>
-      </div>
+  <!-- ======================= STUDIO ======================= -->
+  <section class="band" id="a-propos">
+    <div class="shell">
+      <span class="band__index" data-anim="fade"><b>06</b> — Studio</span>
 
-      <div class="spec-card" data-anim="card">
-        <div class="spec-card__head">
-          <span>Fiche studio</span>
-          <span class="status-dot">Disponible</span>
+      <div class="about">
+        <div>
+          <h2 class="band__title" data-anim="fade" data-i18n="about.title">À propos d’OV7</h2>
+          <p class="about__text" data-anim="fade" data-i18n="about.p1">
+            OV7 Development est un studio de développement indépendant spécialisé dans la
+            conception de solutions numériques sur mesure.
+          </p>
+          <p class="about__text" data-anim="fade" data-i18n="about.p2">
+            L’objectif est de transformer des besoins concrets en produits fonctionnels,
+            performants et maintenables, avec une approche allant de l’architecture au
+            développement et à la mise en production.
+          </p>
+          <div class="about__pills" data-about-pills></div>
         </div>
-        <div data-about-specs></div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ======================= AVANTAGES ======================= -->
-  <section class="section section--tight" id="avantages">
-    <div class="container">
-      <div class="section-head" data-anim-trigger>
-        <span class="eyebrow mono" data-anim="fade" data-i18n="advantages.eyebrow">Avantages</span>
-        <h2><span class="line"><span class="line__inner" data-anim="mask" data-i18n="advantages.title">Pourquoi travailler avec OV7&#160;?</span></span></h2>
+        <div class="spec-card" data-anim="card">
+          <div class="spec-card__head">
+            <span>Fiche studio</span>
+            <span class="status-dot">Disponible</span>
+          </div>
+          <div data-about-specs></div>
+        </div>
       </div>
-      <div class="advantages-grid" data-advantages data-stagger="60"></div>
     </div>
   </section>
 
   <!-- ======================= AVIS ======================= -->
-  <section class="section section--tight reviews" id="avis">
-    <div class="container">
-      <div class="section-head" data-anim-trigger>
-        <span class="eyebrow mono" data-anim="fade" data-i18n="reviews.eyebrow">Avis</span>
-        <h2><span class="line"><span class="line__inner" data-anim="mask" data-i18n="reviews.title">Retours clients</span></span></h2>
-        <p class="section-lead" data-anim="fade" data-i18n="reviews.lead">
-          Ce que disent les personnes avec qui j’ai travaillé.
-        </p>
-      </div>
-      <div class="reviews-grid" data-reviews data-stagger="60"></div>
+  <section class="band" id="avis">
+    <div class="shell">
+      <span class="band__index" data-anim="fade"><b>07</b> — Retours</span>
+      <h2 class="band__title" data-anim="fade" data-i18n="reviews.title">Retours clients</h2>
+      <div class="reviews-grid" data-reviews></div>
     </div>
   </section>
 
   <!-- ======================= CONTACT ======================= -->
-  <section class="section" id="contact" data-shape="contact">
-    <div class="container">
-      <div class="section-head" data-anim-trigger>
-        <span class="eyebrow mono" data-anim="fade" data-i18n="contact.eyebrow">Contact</span>
-        <h2><span class="line"><span class="line__inner" data-anim="mask" data-i18n="contact.title">Un projet en tête&#160;?</span></span></h2>
-        <p class="section-lead" data-anim="fade" data-i18n="contact.lead">
-          Décrivez votre projet et recevez une réponse adaptée à vos besoins.
-        </p>
-      </div>
+  <section class="band" id="contact">
+    <div class="shell">
+      <span class="band__index" data-anim="fade"><b>08</b> — Contact</span>
+      <h2 class="band__title" data-anim="fade" data-i18n="contact.title">Un projet en tête&#160;?</h2>
+      <p class="band__lead" data-anim="fade" data-i18n="contact.lead">
+        Décrivez votre projet et recevez une réponse adaptée à vos besoins.
+      </p>
 
       <div class="contact">
         <aside class="contact__aside" data-anim="fade">
@@ -434,17 +366,10 @@
 
 <!-- ======================= FOOTER ======================= -->
 <footer class="footer">
-  <div class="container">
+  <div class="shell">
     <div class="footer__grid">
       <div class="footer__about">
-        <a class="brand" href="#accueil">
-          <span class="brand__mark" aria-hidden="true">OV7</span>
-          <span class="brand__text">
-            <span class="brand__name">OV7</span>
-            <span class="brand__suffix">Development</span>
-          </span>
-        </a>
-        <p class="footer__tagline">Web · Software · Gaming</p>
+        <span class="footer__mark">OV7</span>
         <p class="footer__desc">
           Studio de développement indépendant. Applications, sites web, logiciels
           et systèmes sur mesure, de l’architecture à la mise en production.
@@ -456,8 +381,8 @@
         <ul>
           <li><a href="#services">Services</a></li>
           <li><a href="#projets">Projets</a></li>
-          <li><a href="#technologies">Technologies</a></li>
-          <li><a href="#a-propos">À propos</a></li>
+          <li><a href="#technologies">Stack</a></li>
+          <li><a href="#a-propos">Studio</a></li>
         </ul>
       </div>
 
@@ -477,8 +402,8 @@
     </div>
 
     <div class="footer__bottom">
-      <span>© <span data-year>2026</span> OV7 Development — Développement sur mesure.</span>
-      <button type="button" class="mono footer__egg" data-egg-trigger title="System status">SYSTEM_STATUS</button>
+      <span>© <span data-year>2026</span> OV7 Development — Développement sur mesure</span>
+      <button type="button" class="footer__egg" data-egg-trigger title="System status">System_status</button>
     </div>
   </div>
 </footer>

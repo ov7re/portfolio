@@ -1,212 +1,213 @@
-# OV7 Development — Portfolio
+# OV7 OS — portfolio d'OV7 Development
 
-Site vitrine d'OV7 Development, en ligne sur **[ov7.fr](https://ov7.fr)**.
+Le portfolio **[ov7.fr](https://ov7.fr)** est un faux système d'exploitation :
+bureau, fenêtres déplaçables, barre des tâches, menu démarrer, terminal.
+Il est piloté par **OV7 Studio**, le logiciel d'administration
+(**admin.ov7.fr**), relié au site par une API. Le tout tourne sur un NAS,
+exposé par un tunnel Cloudflare.
 
-HTML, CSS et JavaScript natifs, sans build : GitHub Pages sert les fichiers de
-la racine tels quels, un `git push` suffit à mettre le site en ligne.
+```
+                     Cloudflare (HTTPS, tunnel, Access)
+                     │                         │
+              ov7.fr │                         │ admin.ov7.fr
+                     ▼                         ▼
+   ┌──────────────── NAS · Docker ─────────────────────────────┐
+   │  cloudflared ──► ov7 (Node.js, port 8080)                  │
+   │                   ├─ site/      OV7 OS (public)            │
+   │                   ├─ admin/     OV7 Studio (logiciel)      │
+   │                   ├─ /api/public/*   contenu, contact      │
+   │                   ├─ /api/admin/*    tout le reste         │
+   │                   └─ data/      contenu, versions, images  │
+   └────────────────────────────────────────────────────────────┘
+```
 
-Deux librairies seulement, chargées depuis un CDN et **toutes deux optionnelles** :
-**GSAP + ScrollTrigger** pour le motion design, **Three.js** pour la scène 3D.
-Si l'une ou l'autre est bloquée, le site reste complet et lisible.
+Aucune dépendance npm : Node.js seul, du HTML, du CSS et du JavaScript natifs.
 
 ---
 
-## Structure
+## Ce que permet le logiciel
+
+| Fonction | Où |
+| --- | --- |
+| Ajouter, modifier, masquer, réordonner les **avis clients** | Avis clients |
+| Modifier **toutes les parties du site** : identité, à propos, méthode, services, projets, stack, tarifs, contact, réseaux, apparence d'OV7 OS | Menu « Sections du site » |
+| **Prévisualiser** le brouillon sur le vrai site avant publication | bouton Prévisualiser |
+| **Déployer** le brouillon en production, garder l'historique, **restaurer** une ancienne version | Déploiement |
+| Activer le **mode maintenance** (effet immédiat, message personnalisable) | Maintenance, ou interrupteur du tableau de bord |
+| **Installer les mises à jour du code** depuis GitHub, avec maintenance automatique pendant l'installation | Mises à jour |
+| Lire les **messages** du formulaire de contact | Messages |
+| Envoyer des **images** (couvertures, captures) | Médias |
+| Suivre la fréquentation (sans cookie), le journal d'activité, changer le mot de passe | Tableau de bord, Journal, Compte |
+
+OV7 Studio s'installe comme une application (Chrome / Edge : icône
+« Installer » dans la barre d'adresse) : il s'ouvre alors dans sa propre fenêtre.
+
+### Brouillon, déploiement, versions
+
+Toute modification enregistrée va dans un **brouillon** : le site public ne
+change pas. Le bouton **Déployer** publie le brouillon d'un coup et crée une
+version (v1, v2, v3…). Les 50 dernières versions sont conservées ; chacune peut
+être **remise en ligne** ou **rechargée dans le brouillon**.
+
+La maintenance et les messages, eux, ne passent pas par le brouillon : ils
+prennent effet immédiatement.
+
+---
+
+## Arborescence
 
 ```
 .
-├── index.html              page d'accueil (texte statique = français de référence)
-├── projet.html             page projet, alimentée par ?id=<identifiant>
-├── 404.html                page d'erreur GitHub Pages
-├── robots.txt / sitemap.xml / CNAME
-│
-├── assets/                 favicon et image Open Graph
-│
-├── styles/
-│   ├── base.css            variables, reset, typographie, utilitaires
-│   ├── components.css      boutons, cartes, formulaire, filtres
-│   ├── sections.css        mise en page de l'accueil + responsive
-│   ├── project.css         page projet
-│   └── motion.css          scène 3D, voiles, états de départ des animations
-│
-├── scripts/
-│   ├── data/               ← tout le contenu modifiable est ici
-│   │   ├── site.js         identité, contacts, liens, config du formulaire
-│   │   ├── projects.js     les projets
-│   │   ├── services.js     les deux pôles et leurs prestations
-│   │   ├── technologies.js la stack
-│   │   ├── content.js      méthode, avantages, à propos, avis, tarifs
-│   │   └── form.js         options du formulaire de devis
-│   ├── components/         un fichier par section, chacun ne fait qu'afficher
-│   ├── lib/
-│   │   ├── dom.js          utilitaires DOM, échappement, typographie française
-│   │   ├── icons.js        jeu d'icônes SVG inline
-│   │   ├── cover.js        illustrations de projet générées en SVG
-│   │   ├── theme.js        thème clair / sombre
-│   │   ├── reveal.js       apparitions — voie de secours sans GSAP
-│   │   ├── motion.js       couche de motion design (GSAP + ScrollTrigger)
-│   │   ├── scene3d.js      scène 3D cinématographique (Three.js)
-│   │   └── structure.js    géométrie de la structure en blocs
-│   ├── i18n/               internationalisation (français aujourd'hui)
-│   └── pages/              points d'entrée : home.js et project.js
-│
-└── tools/
-    └── build-sitemap.mjs   régénère sitemap.xml
+├── server/                 API et serveur HTTP (Node.js, aucune dépendance)
+│   ├── index.js            point d'entrée : routage par domaine, sécurité, pages
+│   ├── config.js           variables d'environnement
+│   ├── routes/             public.js (site) · admin.js (logiciel)
+│   ├── lib/                auth, contenu & versions, maintenance, messages,
+│   │                       statistiques, mises à jour git, rendu SEO, fichiers
+│   ├── seed/content.js     contenu initial (repris de l'ancien site)
+│   └── scripts/            set-password.js
+├── shared/                 code commun au site, au logiciel et au serveur
+│   ├── schema.js           ← schéma du contenu : formulaires ET validation
+│   ├── icons.js            jeu d'icônes
+│   └── util.js
+├── site/                   OV7 OS
+│   ├── index.html          gabarit (balises SEO injectées par le serveur)
+│   ├── maintenance.html    écran de maintenance
+│   ├── css/  js/           shell.js (bureau), wm.js (fenêtres), apps/ (une app par fichier)
+├── admin/                  OV7 Studio (logiciel)
+│   ├── js/form.js          moteur de formulaires généré depuis le schéma
+│   └── js/views/           un écran par fichier
+├── data/                   ⚠ données d'exécution (non versionnées) — à sauvegarder
+├── Dockerfile · docker-compose.yml · .env.example
 ```
 
-Principe : **les composants n'inventent aucun contenu**, ils lisent `scripts/data/`.
-Pour changer le site, on modifie une donnée, pas un composant.
+**Ajouter un champ au site** : le déclarer dans `shared/schema.js`, puis
+l'afficher dans l'application concernée (`site/js/apps/…`). Le formulaire du
+logiciel et la validation côté serveur suivent automatiquement ; au démarrage,
+le contenu existant reçoit la valeur par défaut du nouveau champ.
 
 ---
 
-## Modifier le contenu
+## Développement en local
 
-### Ajouter un projet
-
-1. Copier un bloc dans `scripts/data/projects.js` et compléter les champs
-   (l'en-tête du fichier les décrit un par un).
-2. Choisir un `motif` parmi ceux listés dans `scripts/lib/cover.js`
-   (`desktop`, `terminal`, `network`, `search`, `lock`, `bot`, `vehicle`) :
-   l'illustration est générée automatiquement, aucune image à produire.
-3. Régénérer le sitemap :
+Node.js 22 ou plus récent.
 
 ```bash
-node tools/build-sitemap.mjs
+cp .env.example .env      # puis renseigner ADMIN_PASSWORD, SITE_URL=http://localhost:8080, ADMIN_HOSTS=admin.localhost
+npm run dev
 ```
 
-Le projet apparaît aussitôt dans la grille, dans les filtres (dont les compteurs
-se recalculent seuls) et sur sa propre page `projet.html?id=<identifiant>`.
+- Site : <http://localhost:8080>
+- Logiciel : <http://admin.localhost:8080> (Chrome, Edge et Firefox résolvent
+  `*.localhost` sans configuration)
 
-### Règles de contenu
-
-- Ne présenter que des projets réels, avec leur **état réel** (`status`).
-- `links` et `screenshots` restent vides tant que le lien ou la capture n'existe
-  pas : les blocs correspondants disparaissent d'eux-mêmes.
-- Les avis (`content.js`) sont réels uniquement. Liste vide = section masquée.
-- Les statistiques sont **calculées** à partir des données, jamais saisies.
+Les données sont créées dans `data/` au premier démarrage, à partir de
+`server/seed/content.js`. Pour repartir de zéro : arrêter le serveur et
+supprimer `data/`.
 
 ---
 
-## Mouvement et 3D
+## Installation sur le NAS
 
-### La scène
+Prérequis : Docker et Docker Compose (Synology Container Manager, QNAP
+Container Station, Unraid, TrueNAS…), un accès SSH, le domaine `ov7.fr` géré
+par Cloudflare.
 
-Une **structure de blocs modulaires** occupe l'écran derrière toute la page :
-dispersés au chargement, ils s'assemblent en coupole au fil du défilement
-pendant que la caméra traverse le décor. Éclairage braise, sol en relief,
-brouillard, floraison et grain argentique — l'objectif est une image de film.
-
-Tout est procédural : **aucun modèle 3D ni texture à télécharger**.
-
-| Fichier | Rôle |
-| --- | --- |
-| `scripts/lib/structure.js` | géométrie des blocs : position d'arrivée, position de départ, ordre de pose |
-| `scripts/lib/scene3d.js` | rendu, matériaux, lumières, caméra, post-traitement |
-
-**Réglages utiles** (`scene3d.js`) :
-
-| Constante | Effet |
-| --- | --- |
-| `ASSEMBLY_FLOOR` | avancement de l'assemblage au repos (0.68 = coupole déjà bâtie aux deux tiers au premier écran) |
-| `ASSEMBLY_END` | progression de lecture à laquelle la structure est complète |
-| `CAMERA_PATH` | trajectoire de la caméra, exprimée en progression de lecture |
-| `PALETTE` | couleurs de la scène (braise, blocs, sol, brouillard) |
-| `toneMappingExposure` | luminosité générale |
-
-La densité du voile de lisibilité se règle avec `.scene-scrim { opacity }`
-dans `motion.css`.
-
-**Mode réglage** : ouvrir `index.html?debug`, puis dans la console
-
-```js
-__ov7.scene.setProgress(0.42, true);  // se placer à un moment précis
-__ov7.scene.show(1, true);            // révéler la scène instantanément
-```
-
-### Le motion design
-
-Personnalité de mouvement **Premium**, définie en tête de `scripts/lib/motion.js` :
-
-- durées : 0,18 s (retour immédiat) · 0,45 s (standard) · 0,9 s (révélation) ;
-- easing : `power2.out` en entrée, `power2.in` en sortie ;
-- amplitude faible, aucun rebond ;
-- trois couches toujours présentes : élément principal, détail secondaire,
-  fond vivant (la scène 3D).
-
-Le balisage se fait par attributs, jamais par classe d'animation :
-
-| Attribut | Effet |
-| --- | --- |
-| `data-anim="fade"` | translation courte + opacité (titres, lignes, paragraphes) |
-| `data-anim="card"` | panneaux denses (formulaire, fiches) |
-| `data-magnetic` | bouton légèrement magnétique (souris uniquement) |
-| `data-count` | valeur chiffrée comptée à l'écran |
-
-### Règle de sécurité
-
-Un élément n'est masqué **que tant qu'un mécanisme actif s'engage à le révéler** :
-
-- `html.motion` — GSAP anime. La classe est posée avant le premier rendu, puis
-  retirée automatiquement après 4 s si la couche mouvement n'a pas confirmé son
-  démarrage (`data-motion="ready"`).
-- `html.reveal-js` — voie de secours, posée par `observeReveals()` lui-même.
-
-Sans JavaScript, avec un CDN bloqué ou un module en échec, aucune des deux
-classes n'est présente : **rien n'est caché**. Les valeurs chiffrées sont
-écrites en dur dans le HTML, pas seulement produites par l'animation.
-
-Ce comportement se vérifie en remplaçant l'URL de GSAP par une adresse
-injoignable dans `index.html`.
-
-`prefers-reduced-motion` désactive toute la couche : caméra fixe, structure
-déjà assemblée, aucune transformation progressive.
-
-## Formulaire de devis
-
-Aujourd'hui : validation côté client puis repli e-mail (`mailto`) pré-rempli.
-
-Pour brancher une API plus tard, renseigner l'URL dans `formConfig.endpoint`
-(`scripts/data/site.js`). Le formulaire enverra alors un `POST` JSON :
-
-```
-Frontend  →  Backend / API  →  Email · Discord · CRM
-```
-
-**Ne jamais mettre ici une URL de webhook Discord ni une clé d'API** : tous ces
-fichiers sont publics. Le secret, la protection anti-spam et l'envoi réel
-appartiennent au backend. Un piège à robots (champ caché) est déjà en place
-côté client, mais il ne remplace pas une vérification serveur.
-
----
-
-## Thème et langues
-
-- **Thème** : sombre par défaut, bascule claire mémorisée dans le navigateur.
-  La scène 3D suit (mélange normal et couleurs plus denses en clair).
-- **Langues** : le français est la langue de référence et vit dans le HTML.
-  Pour ajouter l'anglais, suivre le mode d'emploi en tête de
-  `scripts/i18n/index.js` — aucun composant n'est à modifier.
-
----
-
-## Développement local
-
-Les modules ES imposent un vrai serveur HTTP (l'ouverture directe du fichier
-`index.html` ne fonctionne pas) :
+### 1. Récupérer le projet
 
 ```bash
-npx http-server -p 4173 -c-1
+git clone https://github.com/ov7re/portfolio.git ov7
+cd ov7
+cp .env.example .env
 ```
 
-Puis ouvrir <http://localhost:4173>.
+Compléter `.env` : `ADMIN_PASSWORD` (long et unique), `CLOUDFLARE_TUNNEL_TOKEN`
+(étape 2). Si le dépôt est privé, le cloner avec un jeton d'accès en lecture
+pour que les mises à jour puissent le récupérer.
+
+### 2. Créer le tunnel Cloudflare
+
+Dans le tableau de bord Cloudflare : **Zero Trust → Réseaux → Tunnels →
+Créer un tunnel** (type *Cloudflared*), choisir l'environnement **Docker** et
+copier le jeton dans `CLOUDFLARE_TUNNEL_TOKEN`.
+
+Ajouter ensuite trois **noms d'hôte publics**, tous vers le même service :
+
+| Nom d'hôte | Service |
+| --- | --- |
+| `ov7.fr` | `http://ov7:8080` |
+| `www.ov7.fr` | `http://ov7:8080` (redirigé vers ov7.fr par le serveur) |
+| `admin.ov7.fr` | `http://ov7:8080` |
+
+`ov7` est le nom du conteneur : les deux conteneurs partagent le même réseau Docker.
+
+### 3. Protéger le logiciel avec Cloudflare Access (recommandé)
+
+**Zero Trust → Accès → Applications → Ajouter → Auto-hébergée**, domaine
+`admin.ov7.fr`, règle « Autoriser » limitée à votre adresse e-mail. Cloudflare
+demande alors un code envoyé par e-mail **avant même** d'afficher la page de
+connexion du logiciel : deux verrous au lieu d'un.
+
+L'API d'administration n'existe que sur `admin.ov7.fr` : elle répond 404 sur
+`ov7.fr`, ce qui empêche de contourner cette protection.
+
+### 4. Démarrer
+
+```bash
+docker compose up -d --build
+docker compose logs -f ov7
+```
+
+Le site est en ligne sur <https://ov7.fr>, le logiciel sur <https://admin.ov7.fr>.
+
+### 5. Ancien hébergement GitHub Pages
+
+Une fois le tunnel en place, supprimer dans Cloudflare les enregistrements DNS
+qui pointaient vers GitHub Pages (le tunnel crée les siens), puis désactiver
+Pages dans les réglages du dépôt GitHub.
 
 ---
 
-## Vérifications avant mise en ligne
+## Déployer une nouvelle version du code
 
-- Aucun défilement horizontal de 375 px à 1920 px.
-- Le formulaire refuse les champs vides, un e-mail invalide, une description
-  trop courte et l'absence de type de projet.
-- `projet.html?id=inconnu` affiche une page « projet introuvable » propre.
-- GSAP injoignable : la page reste entièrement lisible.
-- Le sitemap est à jour après tout ajout ou retrait de projet.
+1. Développer sur votre machine, puis `git push` sur la branche `main`.
+2. Dans le logiciel : **Mises à jour → Rechercher**, vérifier la liste des
+   changements, **Installer la mise à jour**.
+
+Le serveur fait un `git pull` (avance rapide uniquement : jamais d'écrasement
+silencieux). Si seuls le site ou le logiciel ont changé, c'est immédiat. Si le
+code du serveur a changé, le processus redémarre tout seul (Docker le relance)
+et le logiciel se reconnecte. Avec l'option cochée, le site passe en
+maintenance pendant l'installation puis revient automatiquement.
+
+Sans passer par le logiciel : `git pull && docker compose restart ov7`.
+Après une modification du `Dockerfile` : `docker compose up -d --build`.
+
+---
+
+## Sauvegarde
+
+Tout ce qui ne vient pas de git est dans **`data/`** : contenu, versions,
+messages, images, compte, statistiques. Une tâche de sauvegarde du NAS (Hyper
+Backup, snapshot…) sur ce dossier suffit.
+
+Mot de passe oublié :
+
+```bash
+docker compose exec ov7 npm run set-password
+```
+
+---
+
+## Sécurité
+
+- Mot de passe haché (scrypt), sessions opaques en cookie `HttpOnly`,
+  `Secure`, `SameSite=Strict`, 6 tentatives de connexion par 15 min et par IP.
+- Protection CSRF : en-tête obligatoire sur toute écriture de l'API admin.
+- En-têtes stricts (CSP sans script en ligne, `X-Frame-Options`, HSTS…).
+- Contenu nettoyé côté serveur selon le schéma, puis échappé à l'affichage.
+- Formulaire de contact : validation serveur, champ piège anti-robot,
+  3 messages par 10 min et par IP.
+- Images : PNG, JPEG, WebP, GIF uniquement, format vérifié sur le contenu du
+  fichier (pas d'SVG, qui peut contenir du script).
+- Fréquentation sans cookie ni stockage d'adresse IP.

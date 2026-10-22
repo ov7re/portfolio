@@ -1,0 +1,36 @@
+# Déploiement sur le NAS : `docker compose up -d --build` depuis le dossier du dépôt.
+#
+#   ov7           le serveur (site ov7.fr + logiciel admin.ov7.fr + API)
+#   cloudflared   le tunnel Cloudflare : aucun port à ouvrir sur la box
+
+services:
+  ov7:
+    build: .
+    image: ov7-os:latest
+    container_name: ov7
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      DATA_DIR: /data
+      REPO_DIR: /app
+    volumes:
+      # Le dépôt lui-même est monté : les mises à jour installées depuis le
+      # logiciel (git) sont appliquées sans reconstruire l'image.
+      - ./:/app
+      # Contenu, versions, messages, images, comptes : le seul dossier à sauvegarder.
+      - ./data:/data
+    # Accès direct depuis le NAS uniquement (diagnostic). Le public passe par le tunnel.
+    ports:
+      - "127.0.0.1:8080:8080"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: ov7-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      ov7:
+        condition: service_healthy

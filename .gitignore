@@ -1,0 +1,7 @@
+# Données d'exécution (contenu, versions, messages, sessions, images) : à sauvegarder, jamais à versionner
+data/
+.env
+node_modules/
+*.log
+.DS_Store
+Thumbs.db

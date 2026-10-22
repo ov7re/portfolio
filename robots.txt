@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://ov7.fr/sitemap.xml

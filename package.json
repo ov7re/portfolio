@@ -1,0 +1,15 @@
+{
+  "name": "ov7-os",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Portfolio OV7 Development : site OV7 OS, logiciel d'administration et API.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch-path=server --watch-path=shared server/index.js",
+    "set-password": "node server/scripts/set-password.js"
+  }
+}

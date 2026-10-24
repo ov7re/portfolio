@@ -19,6 +19,12 @@ const APP_ROUTES = {
   stack: { title: 'Stack technique', describe: (c) => c.technologies.groups.map((g) => `${g.label} : ${g.items.map((i) => i.name).join(', ')}`).join(' · ') },
   avis: { title: 'Avis clients', describe: (c) => `Les avis des clients de ${c.identity.name}.` },
   contact: { title: 'Contact & devis', describe: (c) => c.contact.intro },
+  'mentions-legales': {
+    title: 'Mentions légales',
+    describe: (c) => `Mentions légales du site ${c.identity.name}.`,
+    available: (c) => Boolean(c.legal.editor),
+    subs: { confidentialite: { title: 'Politique de confidentialité', describe: (c) => `Données collectées par ${c.identity.name} et vos droits.` } },
+  },
   terminal: { title: 'Terminal' },
   parametres: { title: 'Paramètres' },
   corbeille: { title: 'Corbeille' },
@@ -38,8 +44,11 @@ export function resolveRoute(pathname, content) {
     if (!project) return { ...base, found: false, title: `Projet introuvable — ${identity.name}` };
     return { found: true, title: `${project.name} — ${identity.name}`, description: project.summary, image: project.cover };
   }
-  const route = APP_ROUTES[first];
-  if (!route || second) return { ...base, found: false, title: `Page introuvable — ${identity.name}` };
+  const app = APP_ROUTES[first];
+  const route = second ? app?.subs?.[second] : app;
+  if (!route || rest.length || (app.available && !app.available(content))) {
+    return { ...base, found: false, title: `Page introuvable — ${identity.name}` };
+  }
   return { found: true, title: `${route.title} — ${identity.name}`, description: route.describe?.(content) || identity.description };
 }
 
@@ -104,6 +113,7 @@ function noscriptContent(content) {
     <h2>Contact</h2>
     <p>${identity.email ? `<a href="mailto:${e(identity.email)}">${e(identity.email)}</a>` : ''}${identity.discord ? ` · Discord : ${e(identity.discord)}` : ''}</p>
     <p>${socials.links.map((l) => `<a href="${e(l.href)}" rel="me noopener">${e(l.label)}</a>`).join(' · ')}</p>
+    ${content.legal.editor ? '<p><a href="/mentions-legales">Mentions légales</a> · <a href="/mentions-legales/confidentialite">Confidentialité</a></p>' : ''}
   </div>`;
 }
 
@@ -128,7 +138,10 @@ export function renderMaintenance(maintenance, content) {
 }
 
 export function renderSitemap(content) {
-  const urls = ['/', ...Object.keys(APP_ROUTES).filter((r) => !['terminal', 'parametres', 'corbeille'].includes(r)).map((r) => `/${r}`), ...content.projects.items.map((p) => `/projets/${p.id}`)];
+  const apps = Object.entries(APP_ROUTES)
+    .filter(([r, app]) => !['terminal', 'parametres', 'corbeille'].includes(r) && (!app.available || app.available(content)))
+    .flatMap(([r, app]) => [`/${r}`, ...Object.keys(app.subs || {}).map((s) => `/${r}/${s}`)]);
+  const urls = ['/', ...apps, ...content.projects.items.map((p) => `/projets/${p.id}`)];
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${e(config.siteUrl + u)}</loc></url>`).join('\n')}

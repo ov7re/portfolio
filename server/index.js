@@ -16,6 +16,7 @@ import {
   HttpError, Router, appendCookie, clientIp, cookie, hostOf, parseCookies,
   redirect, sendJson, sendText,
 } from './lib/http.js';
+import { initMessages } from './lib/messages.js';
 import { renderMaintenance, renderRobots, renderSite, renderSitemap } from './lib/pages.js';
 import { initSettings, getMaintenance } from './lib/settings.js';
 import { serveFile } from './lib/static.js';
@@ -28,6 +29,7 @@ import { publicRoutes } from './routes/public.js';
 initAuth();
 initSettings();
 initContent();
+initMessages();
 initStats();
 finishPendingUpdate();
 
@@ -43,8 +45,8 @@ const SECURITY_HEADERS = {
   'Content-Security-Policy': [
     "default-src 'self'",
     "script-src 'self'",
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "font-src 'self' https://fonts.gstatic.com",
+    "style-src 'self' 'unsafe-inline'",
+    "font-src 'self'",
     "img-src 'self' data: blob: https:",
     "connect-src 'self'",
     "frame-ancestors 'none'",

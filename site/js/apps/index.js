@@ -2,6 +2,7 @@
 
 import about from './about.js';
 import contact from './contact.js';
+import legal from './legal.js';
 import projects from './projects.js';
 import reviews from './reviews.js';
 import services from './services.js';
@@ -10,13 +11,14 @@ import stack from './stack.js';
 import terminal from './terminal.js';
 import trash from './trash.js';
 
-const ALL = [projects, about, services, stack, reviews, contact, terminal, settings, trash];
+const ALL = [projects, about, services, stack, reviews, contact, terminal, settings, trash, legal];
 
 /** Applications disponibles selon le contenu publié. */
 export function availableApps(content) {
   return ALL.filter((app) => {
     if (app.id === 'reviews') return content.reviews.items.length > 0;
     if (app.id === 'trash') return content.os.trash;
+    if (app.id === 'legal') return Boolean(content.legal.editor);
     return true;
   }).map((app) => ({ ...app, path: `/${app.route}` }));
 }

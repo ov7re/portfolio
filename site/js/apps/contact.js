@@ -81,7 +81,7 @@ export default {
               </label>
               <label class="trap" aria-hidden="true">Site web<input name="website" tabindex="-1" autocomplete="off"></label>
               <div class="form__foot">
-                <p class="muted" style="font-size:12px">Vos informations servent uniquement à vous répondre.</p>
+                <p class="muted" style="font-size:12px">Vos informations servent uniquement à vous répondre.${content.legal.editor ? ' <a href="/mentions-legales/confidentialite" data-legal="confidentialite">En savoir plus</a>' : ''}</p>
                 <button class="btn btn--primary" type="submit">${icon('send')}Envoyer</button>
               </div>
             </form>

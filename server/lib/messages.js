@@ -2,14 +2,29 @@
 
 import crypto from 'node:crypto';
 import { config } from '../config.js';
+import { getLive } from './content.js';
 import { HttpError } from './http.js';
 import { readJson, writeJson } from './store.js';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const clip = (value, max) => String(value ?? '').trim().slice(0, max);
 
+/** Liste les messages, après suppression de ceux qui dépassent la durée de
+ *  conservation annoncée dans la politique de confidentialité. */
 export function listMessages() {
-  return readJson('messages.json', []);
+  const all = readJson('messages.json', []);
+  const months = getLive().content.legal.messagesRetention;
+  const cutoff = new Date();
+  cutoff.setMonth(cutoff.getMonth() - months);
+  const kept = all.filter((m) => new Date(m.createdAt) >= cutoff);
+  if (kept.length !== all.length) writeJson('messages.json', kept);
+  return kept;
+}
+
+/** Purge au démarrage puis une fois par jour, même sans visite du logiciel. */
+export function initMessages() {
+  listMessages();
+  setInterval(listMessages, 86_400_000).unref();
 }
 
 export function unreadCount() {

@@ -36,6 +36,11 @@ export function createShell(root, data, { reboot, shutdown }) {
       <div class="desktop__scroll">
         <section class="widgets" aria-label="Widgets"></section>
         <nav class="icons" aria-label="Applications"></nav>
+        ${byId('legal') ? `
+          <p class="legal-links">
+            <a href="/mentions-legales" data-legal="">Mentions légales</a>
+            <a href="/mentions-legales/confidentialite" data-legal="confidentialite">Confidentialité</a>
+          </p>` : ''}
       </div>
     </main>
     <div class="windows"></div>
@@ -149,7 +154,7 @@ export function createShell(root, data, { reboot, shutdown }) {
   /* ------------------------------ Bureau ------------------------------ */
 
   function renderIcons() {
-    iconsNav.innerHTML = apps.map((app) => `
+    iconsNav.innerHTML = apps.filter((app) => app.desktop !== false).map((app) => `
       <button class="dicon" type="button" data-app="${app.id}">
         ${tile(app.icon, app.tone)}
         <span class="dicon__label">${e(app.title)}</span>
@@ -412,6 +417,12 @@ export function createShell(root, data, { reboot, shutdown }) {
     const project = event.target.closest('.widget [data-project]');
     if (project) openApp('projects', { sub: project.dataset.project });
     if (event.target.closest('[data-open-search]')) toggleStart(true);
+    // Liens vers les mentions légales, sur le bureau comme dans les applications.
+    const legalLink = event.target.closest('a[data-legal]');
+    if (legalLink && byId('legal')) {
+      event.preventDefault();
+      openApp('legal', { sub: legalLink.dataset.legal });
+    }
   });
 
   const onKey = (event) => {

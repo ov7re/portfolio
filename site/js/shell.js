@@ -209,7 +209,9 @@ export function createShell(root, data, { reboot, shutdown }) {
     const button = (app, runningOnly = false) => {
       const win = wm.find(app.id);
       const classes = ['tb-app', win && 'is-open', win && wm.focused === win && 'is-active', runningOnly && 'is-running-only'].filter(Boolean).join(' ');
-      return `<button class="${classes}" type="button" data-task="${app.id}" title="${e(app.title)}" aria-label="${e(app.title)}">${tile(app.icon, app.tone)}</button>`;
+      // Sur ordinateur, une application ouverte affiche aussi son nom.
+      const label = win && !isMobile() ? `<span class="tb-app__label">${e(app.title)}</span>` : '';
+      return `<button class="${classes}" type="button" data-task="${app.id}" title="${e(app.title)}" aria-label="${e(app.title)}">${tile(app.icon, app.tone)}${label}</button>`;
     };
     taskApps.innerHTML =
       pinnedApps.map((a) => button(a)).join('') +

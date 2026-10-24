@@ -4,10 +4,7 @@ import { icon } from '/shared/icons.js';
 import { escapeHtml as e } from '/shared/util.js';
 
 export const LOGO = `<svg viewBox="0 0 64 64" aria-hidden="true">
-  <defs><linearGradient id="ov7-logo" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#ff5a1f"/><stop offset=".6" stop-color="#d4162c"/><stop offset="1" stop-color="#8f0f1e"/>
-  </linearGradient></defs>
-  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#ov7-logo)"/>
+  <rect x="2" y="2" width="60" height="60" rx="14" style="fill: var(--accent, #ff5a1f)"/>
   <path d="M22 21h22l-11 24" fill="none" stroke="#fff" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`;
 

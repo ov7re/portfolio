@@ -90,7 +90,7 @@ export default {
 
         <section class="section prose">
           <h2 class="h2">Cookies et stockage local</h2>
-          <p>Le site ne dépose aucun cookie. Cloudflare peut seulement poser un cookie technique de sécurité, sans suivi, s’il doit vérifier qu’une visite ne provient pas d’un robot. Le site garde dans votre navigateur vos préférences d’affichage (thème, couleur, fond d’écran, animations) et le fait d’avoir déjà vu l’écran de démarrage. Ces informations ne quittent jamais votre appareil ; vous pouvez les effacer depuis Paramètres ou les réglages de votre navigateur.</p>
+          <p>Le site ne dépose aucun cookie. Cloudflare peut seulement poser un cookie technique de sécurité, sans suivi, s’il doit vérifier qu’une visite ne provient pas d’un robot. Le site garde dans votre navigateur vos préférences d’affichage (thème, couleur, fond d’écran, animations), le fait d’avoir déjà vu l’écran de démarrage et la fermeture du bandeau d’information. Ces informations ne quittent jamais votre appareil ; vous pouvez les effacer depuis Paramètres ou les réglages de votre navigateur.</p>
         </section>
 
         <section class="section prose">

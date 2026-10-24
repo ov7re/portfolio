@@ -2,6 +2,7 @@
 
 import { MaintenanceError, loadContent } from './api.js';
 import { forgetBoot, shouldBoot, startBoot } from './boot.js';
+import { showNotice } from './notice.js';
 import { setDefaults } from './prefs.js';
 import { createShell } from './shell.js';
 import { el, LOGO } from './ui.js';
@@ -46,6 +47,8 @@ async function start() {
     if (data.content.os.boot) await boot.play(data.content.os.bootLines);
     else await boot.finish();
   }
+  // Une fois l'écran de démarrage retiré, pour ne pas le couvrir.
+  setTimeout(() => showNotice(root, { privacy: Boolean(data.content.legal.editor) }), boot ? 700 : 400);
 }
 
 start();
